@@ -1,1 +1,1 @@
-# 2021-spring-cs160-group1
+# 2021-spring-cs160-team-EduAll
