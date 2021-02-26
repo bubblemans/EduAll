@@ -8,7 +8,7 @@ class ChatMessage extends Component {
   render () {
     return (
       <div key={this.props.index}>
-        {this.props.name} {this.props.content}
+        {this.props.name}: {this.props.content}
       </div>
     );
   }

@@ -19,13 +19,13 @@ class Chat extends Component {
   ws = new WebSocket(URL);
 
   componentDidMount() {
-    this.ws.onopen = () => {
+    this.ws.onopen = event => {
       console.log('connected');
     }
 
     this.ws.onmessage = event => {
-      const message = JSON.parse(event.data);
-      this.addMessage(message);
+      const messages = JSON.parse(event.data);
+      this.addMessages(messages);
     }
 
     this.ws.onclose = () => {
@@ -34,8 +34,8 @@ class Chat extends Component {
     }
   }
 
-  addMessage(message) {
-    this.setState({ messages: [...this.state.messages, message]});
+  addMessages(messages) {
+    this.setState({ messages: [...this.state.messages, ...messages]});
   }
 
   handleChange(event) {
@@ -43,9 +43,9 @@ class Chat extends Component {
   }
 
   handleSubmit(content) {
-    const message = { name: this.state.name, content: content };
-    this.ws.send(JSON.stringify(message));
-    this.addMessage(message);
+    const messages = [{ name: this.state.name, content: content }];
+    this.ws.send(JSON.stringify(messages));
+    this.addMessages(messages);
   }
 
   render() {
