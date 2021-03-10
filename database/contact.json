@@ -1,0 +1,8 @@
+{
+  "user_id": "user_id1",
+  "contacts": [
+    "user_id1",
+    "user_id2",
+    "user_id3"
+  ]
+}

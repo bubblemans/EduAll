@@ -1,0 +1,6 @@
+{
+  "sender": "user_id1",
+  "room_id": "1",
+  "message": "Hi receiver 2!",
+  "created_at": "2016-05-18T16:00:00Z"
+}

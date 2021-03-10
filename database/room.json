@@ -1,0 +1,11 @@
+{
+  "room_id": "1",
+  "room_name": "myroom",
+  "user_ids": [
+    "user_id1",
+    "user_id2",
+    "user_id3"
+  ],
+  "password": "myroompassword",
+  "updated_at": "2016-05-18T16:00:00Z"
+}
