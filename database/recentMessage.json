@@ -1,6 +1,6 @@
 {
   "user_id1_as_hash": {
-    "number_of_rooms": 2,
+    "number_of_rooms": "2",
     "room_id_1": "1",
     "sender_1": "user_id2",
     "message_1": "What's up?",
@@ -11,7 +11,7 @@
     "created_at_2": "2016-05-18T16:00:00Z"
   },
   "user_id2_as_hash": {
-    "number_of_rooms": 2,
+    "number_of_rooms": "2",
     "room_id_1": "1",
     "sender_1": "user_id2",
     "message_1": "What's up?",
