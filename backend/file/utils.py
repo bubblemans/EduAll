@@ -1,7 +1,8 @@
 import requests
+import os
 
 
-API_URL = ''  # TODO: save this in env var
+API_URL = os.environ.get('API_URL')
 
 
 def get_user_id(token):

@@ -25,12 +25,15 @@ def post_file(filename):
         token = '123' # test
         owner = utils.get_user_id(token)
 
-        if is_allowed_ext(filename):
-            mongo.save_file(filename, f, owner)
-            response = jsonify(success=True)
-            response.status_code = 201
-            return response
-        else:
+        try:
+            if is_allowed_ext(filename):
+                mongo.save_file(filename, f, owner)
+                response = jsonify(success=True)
+                response.status_code = 201
+                return response
+            else:
+                return abort(400)
+        except utils.FileError:
             return abort(400)
 
 
@@ -39,8 +42,11 @@ def get_file(filename):
     token = '123' # test
     owner = utils.get_user_id(token)
 
-    f = mongo.get_file(filename, owner)
-    return f
+    try:
+        f = mongo.get_file(filename, owner)
+        return f
+    except utils.FileError:
+            return abort(400)
 
 
 @app.route('/file', methods=['GET'])

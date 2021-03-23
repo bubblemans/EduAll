@@ -110,4 +110,4 @@ yuv
 zip
 m4v
 vcf
-
+yaml
