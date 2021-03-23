@@ -5,23 +5,33 @@ import utils
 
 
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])  # TODO: need more and it's not used for now
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
+
+with open('./extensions.txt') as rf:
+    ALLOWED_EXTENSIONS = set(rf.readlines())
 
 
 @app.route('/file/<filename>', methods=['POST'])
 def post_file(filename):
+
+    def is_allowed_ext(filename):
+        extension = filename.split('.')[-1]
+        print(extension)
+        return extension in ALLOWED_EXTENSIONS
+
     if request.method == 'POST':
         f = request.files['file']
 
         token = '123' # test
         owner = utils.get_user_id(token)
 
-        mongo.save_file(filename, f, owner)
-
-        response = jsonify(success=True)
-        response.status_code = 201
-        return response
+        if is_allowed_ext(filename):
+            mongo.save_file(filename, f, owner)
+            response = jsonify(success=True)
+            response.status_code = 201
+            return response
+        else:
+            return abort(400)
 
 
 @app.route('/file/<filename>', methods=['GET'])
