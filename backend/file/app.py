@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
 with open('./extensions.txt') as rf:
-    ALLOWED_EXTENSIONS = set(rf.readlines())
+    ALLOWED_EXTENSIONS = set([ext.replace('\n', '') for ext in rf.readlines()])
 
 
 @app.route('/file/<filename>', methods=['POST'])
@@ -16,7 +16,6 @@ def post_file(filename):
 
     def is_allowed_ext(filename):
         extension = filename.split('.')[-1]
-        print(extension)
         return extension in ALLOWED_EXTENSIONS
 
     if request.method == 'POST':
@@ -33,7 +32,7 @@ def post_file(filename):
                 return response
             else:
                 return abort(400)
-        except utils.FileError:
+        except mongo.FileError:
             return abort(400)
 
 
@@ -45,7 +44,7 @@ def get_file(filename):
     try:
         f = mongo.get_file(filename, owner)
         return f
-    except utils.FileError:
+    except mongo.FileError:
             return abort(400)
 
 

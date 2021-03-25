@@ -111,3 +111,4 @@ zip
 m4v
 vcf
 yaml
+yml
