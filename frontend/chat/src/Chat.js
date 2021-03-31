@@ -8,7 +8,8 @@ class Chat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: 'Alvin',
+      sender: 'user_id_1',
+      room_id: 'room_id_1',
       messages: []
     };
 
@@ -42,8 +43,12 @@ class Chat extends Component {
     this.setState({ name: event.target.value });
   }
 
-  handleSubmit(content) {
-    const messages = [{ name: this.state.name, content: content }];
+  handleSubmit(message) {
+    const messages = [{
+      room_id: this.state.room_id,
+      sender: this.state.sender,
+      message: message
+    }];
     this.ws.send(JSON.stringify(messages));
     this.addMessages(messages);
   }
@@ -51,16 +56,16 @@ class Chat extends Component {
   render() {
     return (
       <div>
-        <label htmlFor='name'>
+        {/* <label htmlFor='name'>
           Name:&nbsp;
           <input
             type='text'
             id={'name'}
             placeholder={'Enter your name'}
-            value={this.state.name}
+            value={this.state.sender}
             onChange={this.handleChange}
           />
-        </label>
+        </label> */}
         <ChatInput
           onSubmitMessage={this.handleSubmit}
         />
@@ -69,8 +74,7 @@ class Chat extends Component {
             return (
               <ChatMessage
                 key={index}
-                name={message.name}
-                content={message.content}
+                message={message.message}
               />
             );
           })
