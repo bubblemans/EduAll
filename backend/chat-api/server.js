@@ -18,6 +18,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const { getContact, createContacts, updateContacts } = require('./mongo');
+
 const app = express();
 const port = 3000;
 
@@ -28,29 +30,30 @@ app.use(cors());
 app.get('/contact/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
-  // const contact = getContact(user_id);
-  var contact = [
-      'user_id_1',
-      'user_id_2'
-  ]
-  res.json(contact);
+  const user_id = token;
+  getContact(user_id).then(contact => {
+    res.json(contact);
+  });
 })
 
 app.post('/contact/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
+  const user_id = token;
   const contacts = req.body.contacts;
-  console.log(contacts);
-  // createContacts(user_id, contacts);
-  res.sendStatus(201);
+  createContacts(user_id, contacts).then(
+    res.sendStatus(201)
+  );
 })
 
 app.put('/contact/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
+  const user_id = token;
   const contacts = req.body.contacts;
-  // updateContacts(user_id, contacts);
-  res.sendStatus(200);
+  updateContacts(user_id, contacts).then(
+    res.sendStatus(200)
+  );
 })
 
 app.get('/room/:token', (req, res) => {
