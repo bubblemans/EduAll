@@ -18,7 +18,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const { getContact, createContacts, updateContacts } = require('./mongo');
+const { getContact, createContacts, updateContacts, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
 
 const app = express();
 const port = 3000;
@@ -59,57 +59,49 @@ app.put('/contact/:token', (req, res) => {
 app.get('/room/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
-  const room_id = req.query.id | null;
-  if (room_id === 0) {
-    // const rooms = getRooms(user_id);
-    const rooms = {
-      'rooms': [
-        {
-          'id': 'user_id_1',
-          'name': 'myroom',
-          'participants': [
-            'user_id_1',
-            'user_id_2'
-          ],
-          "password": "myroompassword"
-        }
-      ]
-    }
-    res.json(rooms);
+  const room_id = req.query.id;
+  const user_id = token;
+  if (room_id === undefined) {
+    getRooms(user_id).then( rooms => {
+      res.json(rooms);
+    });
   } else {
-    // const room = getRoom(user_id, room_id);
-    const room = {
-      'id': 'user_id_1',
-      'name': 'myroom',
-      'participants': [
-        'user_id_1',
-        'user_id_2'
-      ],
-      "password": "myroompassword"
-    }
-    res.json(room);
+    const room = getRoom(user_id, room_id).then( room => {
+      if (room === null) {
+        res.json({});
+      } else {
+        res.json(room);
+      }
+    });
   }
 })
 
 app.post('/room/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
+  const user_id = token;
   const data = req.body;
-  console.log(data);
-  // createRoom(user_id, data);
-  res.sendStatus(201);
+  if (data.updated_at === undefined) {
+    data.updated_at = new Date().toISOString();
+    createRoom(user_id, data).then(
+      res.sendStatus(201)
+    );
+  } else {
+    createRoom(user_id, data).then(
+      res.sendStatus(201)
+    );
+  }
 })
 
 app.put('/room/:token', (req, res) => {
   const token = req.params.token;
   // const user_id = getUserId(token);
-  const room_id = req.query.id | null;
-  if (room_id === 0) {
+  const room_id = req.query.id;
+  if (room_id === null) {
     res.sendStatus(400);
   } else {
     const data = req.body;
-    // updateRoom(room_id, data);
-    res.sendStatus(200);
+    updateRoom(room_id, data).then(res.sendStatus(200));
   }
 })
 
