@@ -14,7 +14,7 @@ async function getContact(id) {
   return doc[0].contacts;
 }
 
-async function createContacts(id, contacts) {
+async function createContact(id, contacts) {
   const doc = {
     'user_id': id,
     'contacts': contacts
@@ -23,7 +23,31 @@ async function createContacts(id, contacts) {
   return res;
 }
 
-async function updateContacts(id, contacts) {
+async function createAllContacts(contacts) {
+  var res = null;
+  for (const i in contacts) {
+    const doc = {
+      'user_id': contacts[i],
+      'contacts': contacts
+    };
+    res = await Contact.create(doc);
+  }
+  return res;
+}
+
+async function addContacts(contacts, additionals) {
+  var res = null;
+  for (const i in contacts) {
+    res = await Contact.updateOne(
+      {'user_id': contacts[i]},
+      {$push: {'contacts': {$each: additionals}}},
+      {upsert: true}
+    )
+  }
+  return res;
+}
+
+async function updateContact(id, contacts) {
   const res = await Contact.updateOne(
     {'user_id': id},
     {"contacts": contacts}
@@ -62,8 +86,10 @@ async function updateRoom(room_id, data) {
 
 module.exports = {
   getContact,
-  createContacts,
-  updateContacts,
+  createContact,
+  createAllContacts,
+  updateContact,
+  addContacts,
   getRooms,
   getRoom,
   createRoom,

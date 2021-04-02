@@ -18,7 +18,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const { getContact, createContacts, updateContacts, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
+const { getContact, createContact, createAllContacts, addContacts, updateContact, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
 
 const app = express();
 const port = 3000;
@@ -41,7 +41,7 @@ app.post('/contact/:token', (req, res) => {
   // const user_id = getUserId(token);
   const user_id = token;
   const contacts = req.body.contacts;
-  createContacts(user_id, contacts).then(
+  createContact(user_id, contacts).then(
     res.sendStatus(201)
   );
 })
@@ -51,7 +51,28 @@ app.put('/contact/:token', (req, res) => {
   // const user_id = getUserId(token);
   const user_id = token;
   const contacts = req.body.contacts;
-  updateContacts(user_id, contacts).then(
+  updateContact(user_id, contacts).then(
+    res.sendStatus(200)
+  );
+})
+
+app.post('/contacts/:token', (req, res) => {
+  const token = req.params.token;
+  // const user_id = getUserId(token);
+  const user_id = token;
+  const additionals = req.body.additionals;
+  createAllContacts(additionals).then(
+    res.sendStatus(201)
+  );
+})
+
+app.put('/contacts/:token', (req, res) => {
+  const token = req.params.token;
+  // const user_id = getUserId(token);
+  const user_id = token;
+  const contacts = req.body.contacts;
+  const additionals = req.body.additionals;
+  addContacts(contacts, additionals).then(
     res.sendStatus(200)
   );
 })
