@@ -1,24 +1,9 @@
-// https://app.swaggerhub.com/apis/bubblemans/chat/1.0.0#/
-// GET contacts for chat page to choose who to talk to
-// CREATE contacts for registration page => course service (students choose instructor) => create contacts for users that are in the same course
-// PUT contacts <= more people enroll in a course or use email to add to contact
-
-// GET room when user click the room on the left, return the room info first, and return message later
-// POST room for chat page to create a room after choosing who to talk to and sending the 1st message (no history message)
-// PUT room for people to join the room/change room's name/change room's password
-
-// GET message/room_id -> no need, use websocket
-// POST message/room_id -> no need, use websocket but need to add a function for redis
-// PUT message/room_id -> no need for now
-// DELETE message/room_id -> no need for now
-
-// GET recentMessages return redis data
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const { getContact, createContact, createAllContacts, addContacts, updateContact, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
+const { getRecentMessages } = require('./redis');
 
 const app = express();
 const port = 3000;
@@ -26,6 +11,10 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Internal Errors');
+})
 
 app.get('/contact/:token', (req, res) => {
   const token = req.params.token;
@@ -124,6 +113,15 @@ app.put('/room/:token', (req, res) => {
     const data = req.body;
     updateRoom(room_id, data).then(res.sendStatus(200));
   }
+})
+
+app.get('/recentMessages/:token', (req, res) => {
+  const token = req.params.token;
+  // const user_id = getUserId(token);
+  const user_id = token;
+  getRecentMessages(user_id, data => {
+    res.json(data);
+  })
 })
 
 app.listen(port, () => {
