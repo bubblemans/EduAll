@@ -41,7 +41,7 @@ export const SidebarData = [
     },
     {
         title:'Files',
-        path:'/files',
+        path:'/file-upload',
         icon: < AiFillFilePdf/>,
         cName: 'nav-text'
     },

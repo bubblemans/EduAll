@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import { ContextStore } from './ContextStore';
 import Sidebar from './Components/Sidebar/Sidebar'
+import FileUpload from './Pages/FileUpload';
 
 export default function App() {
   const [ user , setUser ] = useState("");
@@ -19,6 +20,8 @@ export default function App() {
                 <Route path="/" exact component={LoginForm}/>
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
+                <Route path="/file-upload" component={FileUpload}/>
+
             </ContextStore.Provider>
         </Switch>
       </Router>
