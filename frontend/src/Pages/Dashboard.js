@@ -1,7 +1,7 @@
 import React, { useContext, useEffect }from 'react'
 import { ContextStore } from '../ContextStore';
 
-export default function HomePage () {
+export default function Dashboard () {
     const { SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
     useEffect(() => {
