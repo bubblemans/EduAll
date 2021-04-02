@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const { updateRecentMessage } = require('./redis');
+
 const url = 'mongodb://localhost:27017/chat';
 const messageSchema = new mongoose.Schema({
   message_id: String,
@@ -24,6 +26,7 @@ async function insertMessage(message) {
   if (message.created_at === undefined) {
     message.created_at = new Date().toISOString();
   }
+  updateRecentMessage(message);
   await Message.create(message);
 }
 
