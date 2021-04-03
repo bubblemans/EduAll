@@ -4,7 +4,7 @@ export default function FileCard ({ name, description, date  }) {
     
     return(
         <div className="file-card"> 
-           <div> {name} </div>
+           <button className = "cardButton" onClick={() => {alert(name+' downloaded')}}>{name}</button>
            <div> {description} </div>
            <div> {date} </div>
         </div>
