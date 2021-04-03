@@ -45,7 +45,6 @@ export const SidebarData = [
         icon: < AiFillFilePdf/>,
         cName: 'nav-text'
     },
-    {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
     {
         title:'Logout',
         path:'/logout',

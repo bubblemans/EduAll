@@ -13,14 +13,6 @@ input, button{
   outline: none;
 }
 
-.App{
-  height: 100vh;
-  display:flex ;
-  align-items: center;
-  justify-content: center;
-  background-color: #53556A;
-}
-
 form{
   display: block;
   position: relative;
