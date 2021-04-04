@@ -11,14 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity //JPA
-@Table(name = "users") //Creating 
-public class User { //Creating a user GP entity that is mapped to the table specified above
+@Table(name = "users")
+public class User { // Creating a user GP entity that is mapped to the table specified above
 	
-	@Id   //Defining primary key for the table
+	@Id   // Primary key
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long ID;
 	
-	@Column(name = "first_name") //column names that are mapped to the fields below
+	@Column(name = "first_name")
 	private String firstName;
 	
 	@Column(name = "last_name")
@@ -35,23 +35,23 @@ public class User { //Creating a user GP entity that is mapped to the table spec
 		
 	@Column(name = "Token")
 	private String Token;
-
 	
 
-	public User() { //default constructor
+	public User() {
 		
 	}
 		
-	public User(String firstName, String lastName, String email, String Password, String Role, String Token) {
+	public User(String firstName, String lastName, String email, String Password, String Role, String Token){
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.Password = Password;
 		this.Role = Role;
-		this.Token = Token;
+		this.Token = generateToken(this.ID);
 		
 	}
+	
 	public long getID() {
 		return ID;
 	}
@@ -92,28 +92,31 @@ public class User { //Creating a user GP entity that is mapped to the table spec
 		return Token;
 	}
 	public void setToken(String token) {
-        try {
-            // Create MessageDigest instance for MD5
+		this.Token = token;
+	}
+	
+	public String generateToken(long id) {
+		
+		String token = Long.toString(id);
+		
+		try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            //Add token bytes to digest
             md.update(token.getBytes());
-            //Get the hash's bytes 
             byte[] bytes = md.digest();
-            //This bytes[] has bytes in decimal format;
-            //Convert it to hexadecimal format
+            // This bytes[] has bytes in decimal format;
+            // Converting to hexadecimal format
             StringBuilder sb = new StringBuilder();
             for(int i=0; i< bytes.length ;i++)
             {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
-            //Get complete hashed password in hex format
-            this.Token = sb.toString();
+            // Token hashed in hex format
+            token = sb.toString();
         } 
         catch (NoSuchAlgorithmException e) 
         {
             e.printStackTrace();
-        }
-               
+        }		
+		return token;
 	}
-
 }
