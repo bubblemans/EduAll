@@ -25,7 +25,7 @@ export default function Loginform() {
               console.log("Logged in");
               setUser(formDetails.name)
               // Push to the Home Page 
-              history.push('/home')
+              history.push('/dashboard')
 
         }else {
             console.log("Details do not match!");

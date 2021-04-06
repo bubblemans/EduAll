@@ -1,3 +1,4 @@
+
 *{
   margin: 0;
   padding: 0;
@@ -10,14 +11,6 @@ input, button{
   background: none;
   border: none;
   outline: none;
-}
-
-.App{
-  height: 100vh;
-  display:flex ;
-  align-items: center;
-  justify-content: center;
-  background-color: #53556A;
 }
 
 form{
