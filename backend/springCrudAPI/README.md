@@ -9,7 +9,7 @@ brew install maven
 - Change the mysql password in ./src/main/resources/application.properties
 - Create a mysql schema **usersDB** on localhost
 
-# Run pring-boot
+# Run spring-boot
 ```bash
 mvn spring-boot:run
 ```
