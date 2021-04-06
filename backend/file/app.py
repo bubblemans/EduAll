@@ -2,10 +2,13 @@ from flask import Flask, request, abort, send_file, jsonify
 from werkzeug.utils import secure_filename
 import mongo
 import utils
+import logging
 
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
+
+logging.basicConfig(level=logging.DEBUG)
 
 with open('./extensions.txt') as rf:
     ALLOWED_EXTENSIONS = set([ext.replace('\n', '') for ext in rf.readlines()])
@@ -20,8 +23,7 @@ def post_file(filename):
 
     if request.method == 'POST':
         f = request.files['file']
-
-        token = '123' # test
+        token = request.args.get('token')
         owner = utils.get_user_id(token)
 
         try:
@@ -38,7 +40,7 @@ def post_file(filename):
 
 @app.route('/file/<filename>', methods=['GET'])
 def get_file(filename):
-    token = '123' # test
+    token = request.args.get('token')
     owner = utils.get_user_id(token)
 
     try:
@@ -50,7 +52,7 @@ def get_file(filename):
 
 @app.route('/file', methods=['GET'])
 def get_file_by_token():
-    token = '123' # test
+    token = request.args.get('token')
     owner = utils.get_user_id(token)
 
     data = mongo.get_all_files(owner)
