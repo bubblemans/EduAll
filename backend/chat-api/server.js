@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const { getContact, createContact, createAllContacts, addContacts, updateContact, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
 const { getRecentMessages } = require('./redis');
+const { getUserId } = require('./utils');
 
 const app = express();
 const port = 3000;
@@ -47,23 +48,23 @@ app.put('/contact/:token', (req, res) => {
 
 app.post('/contacts/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  const additionals = req.body.additionals;
-  createAllContacts(additionals).then(
-    res.sendStatus(201)
-  );
+  getUserId(token).then(userId => {
+    const additionals = req.body.additionals;
+    createAllContacts(additionals).then(
+      res.sendStatus(201)
+    );
+  });
 })
 
 app.put('/contacts/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  const contacts = req.body.contacts;
-  const additionals = req.body.additionals;
-  addContacts(contacts, additionals).then(
-    res.sendStatus(200)
-  );
+  getUserId(token).then(userId => {
+    const contacts = req.body.contacts;
+    const additionals = req.body.additionals;
+    addContacts(contacts, additionals).then(
+      res.sendStatus(200)
+    );
+  })
 })
 
 app.get('/room/:token', (req, res) => {

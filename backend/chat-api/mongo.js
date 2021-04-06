@@ -44,6 +44,14 @@ async function addContacts(contacts, additionals) {
       {upsert: true}
     )
   }
+
+  for (const i in additionals) {
+    res = await Contact.updateOne(
+      {'user_id': additionals[i]},
+      {$push: {'contacts': {$each: contacts}}},
+      {upsert: true}
+    )
+  }
   return res;
 }
 
