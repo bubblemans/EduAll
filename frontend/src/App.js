@@ -7,14 +7,15 @@ import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import { ContextStore } from './ContextStore';
 import Sidebar from './Components/Sidebar/Sidebar'
 import FileUpload from './Pages/FileUpload';
+import './App.css'
 
 export default function App() {
-  const [ user , setUser ] = useState("");
+  const [ user,setUser ] = useState("");
   const [showSidebar,setShowSidebar] = useState(false);
   return (
     <div className="App">
       <Router>
-        <Sidebar />
+        {showSidebar? <Sidebar />: null}
         <Switch>        
             <ContextStore.Provider value={{ CurrentUser: [user,setUser], SideBar: [showSidebar, setShowSidebar]}}>
                 <Route path="/" exact component={LoginForm}/>

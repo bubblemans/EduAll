@@ -9,3 +9,86 @@
     padding: 2em 2em 2em 2em ;
     background-color: white;
 }
+
+.App{
+    height: 100vh;
+    display:flex ;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #c1c2cab2; */
+  }
+  
+.dashboard{
+    height: 100vh;
+    display: flex;
+    width: 100%;
+    margin-left: 250px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background-color: #c1c2cab2;
+}
+.welcome {
+    margin-top: 2em;
+    margin-left: 1em;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.welcome span{
+    padding-top: 10px ;
+    margin-left: 1px ;
+    display: block;
+    font-weight: lighter;
+    font-size: 18px;
+    color: rgb(134, 131, 131);
+}
+
+.heading {
+    font-size: 35px;
+    font-weight: bold;
+    align-self: center;
+} 
+.container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin-top: 1em;
+}
+.class-card{
+    display: flex;
+    flex-direction: column;
+    /* border: 2px solid black; */
+    width:20em;
+    height:13em;
+    font-size:  1em;
+    background-color: white;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    font-family: montserrat,sans-serif;
+    padding: 1em 1em 1em 1em;
+    align-items: flex-start;
+}
+
+.class-code {
+    font-weight: bold;
+}
+.label{
+    margin-top: 1em;
+    color: grey;
+}
+.class-details {
+    margin-top: 0.5em;
+    font-weight: 500;
+}
+.class-details-container{
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+}
+.class-details-container div{
+    margin-right: 2em;
+}
+.class-grade {
+    margin-top: 0.7em;
+}
