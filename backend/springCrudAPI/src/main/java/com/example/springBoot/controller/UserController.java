@@ -1,6 +1,10 @@
 package com.example.springBoot.controller;
 
+//import org.json.simple.JSONObject;
+//import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.configurationprocessor.json.JSONException;
+//import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,14 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.example.springBoot.repository.UserRepository;
 import com.example.springBoot.entity.User;
 import com.example.springBoot.exception.ResourceNotFoundException;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController  //annotation for creating rest API
 @RequestMapping("/api/users") //The path for all the rest APIs
@@ -24,6 +31,7 @@ public class UserController {
 	
 	@Autowired //Injected user repository annotation
 	private UserRepository userRepository;
+	private String response;
 	
 	//Get all users
 	@GetMapping
@@ -91,17 +99,30 @@ public class UserController {
 	}
 	
 	//Get userId by Token
-	@GetMapping("/{Token}")
-	public String getIdByToken(@RequestBody User user, @PathVariable("Token") String Token){
-		String userId = "";
+	@GetMapping("/{id}/token")
+	@ResponseBody
+	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
+		String userId = "", jsId = "";
+//		Gson g = new Gson();
+		Map<String, Object> js = new LinkedHashMap<>();
+		
 		try {
-			User user2 = userRepository.searchByToken(Token);
+			User user2 = userRepository.searchByToken(token);
 			userId = String.valueOf(user2.getID());
+			js.put("user ID: ", userId);
+//			String serialized = JsonConvert.SerializeObject(userId);
+//			JSONObject jsonObject = new JSONObject (userId);
+//			System.out.println(jsonObject.toString());
+//			return jsonObject;
 			
 		}
 		catch(Exception e) {
-			return "User does not exist";
-		}
-		return "User ID: " + userId;
+			e.printStackTrace();
+//			String error = "{\"error\": \"User does not exist\"}";
+//			String error = "User ID not found";
+//			JSONObject jsObject = new JSONObject (error);
+//			return jsObject;
+		}	
+		return js;
 	}
 }
