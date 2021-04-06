@@ -1,10 +1,6 @@
 package com.example.springBoot.controller;
 
-//import org.json.simple.JSONObject;
-//import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.configurationprocessor.json.JSONException;
-//import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,21 +24,21 @@ import java.util.Map;
 @RestController  //annotation for creating rest API
 @RequestMapping("/api/users") //The path for all the rest APIs
 public class UserController {
-	
+
 	@Autowired //Injected user repository annotation
 	private UserRepository userRepository;
 	private String response;
-	
+
 	//Get all users
 	@GetMapping
 	public List<User> getAllUsers(){
 		return this.userRepository.findAll();
 	}
-	
+
 	//Get the user by ID
 	@GetMapping("/{id}")
-	public User getUserByID(@PathVariable(value = "id") long userId) { 
-		
+	public User getUserByID(@PathVariable(value = "id") long userId) {
+
 		if(this.userRepository.existsById(userId)) {
 			//The path variable gets it from database
 			return this.userRepository.findById(userId).
@@ -52,41 +48,41 @@ public class UserController {
 			throw new ResourceNotFoundException("User not found with the ID: " + userId);
 		}
 	}
-	
+
 	//Create user
 	@PostMapping
 	public User createUser(@RequestBody User user) {
 		String tk = user.generateToken(user.getID());
 		user.setToken(tk);
 		return this.userRepository.save(user);
-		
+
 	}
-	
+
 	//Update user
 	@PutMapping("/{id}")
 	public User updateUser(@RequestBody User user, @PathVariable("id") long userId) {
-		
+
 		if(this.userRepository.existsById(userId)) {
 			User existingUserObj =  this.userRepository.findById(userId).
 					orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
-			
+
 			existingUserObj.setFirstName(user.getFirstName());
 			existingUserObj.setLastName(user.getLastName());
 			existingUserObj.setEmail(user.getEmail());
 			existingUserObj.setPwd(user.getPwd());
-			
-			return this.userRepository.save(existingUserObj);	
-			
+
+			return this.userRepository.save(existingUserObj);
+
 		}
 		else {
 			throw new ResourceNotFoundException("User not found with the ID: " + userId);
-		}	
+		}
 	}
-	
-	//Delete user by ID 
+
+	//Delete user by ID
 	@DeleteMapping("/{id}/")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") long userId){
-		
+
 		if(this.userRepository.existsById(userId)) {
 			User existingUserObj = this.userRepository.findById(userId).
 					orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
@@ -97,32 +93,22 @@ public class UserController {
 			throw new ResourceNotFoundException("User not found with the ID: " + userId);
 		}
 	}
-	
+
 	//Get userId by Token
 	@GetMapping("/{id}/token")
 	@ResponseBody
 	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
 		String userId = "", jsId = "";
-//		Gson g = new Gson();
 		Map<String, Object> js = new LinkedHashMap<>();
-		
+
 		try {
 			User user2 = userRepository.searchByToken(token);
 			userId = String.valueOf(user2.getID());
-			js.put("user ID: ", userId);
-//			String serialized = JsonConvert.SerializeObject(userId);
-//			JSONObject jsonObject = new JSONObject (userId);
-//			System.out.println(jsonObject.toString());
-//			return jsonObject;
-			
+			js.put("userID", userId);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-//			String error = "{\"error\": \"User does not exist\"}";
-//			String error = "User ID not found";
-//			JSONObject jsObject = new JSONObject (error);
-//			return jsObject;
-		}	
+		}
 		return js;
 	}
 }
