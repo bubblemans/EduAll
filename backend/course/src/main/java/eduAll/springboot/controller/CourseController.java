@@ -7,17 +7,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import eduAll.springboot.repository.CourseRepository;
+import eduAll.springboot.repository.SectionRepository;
 import eduAll.springboot.entity.Course;
+import eduAll.springboot.entity.Section;
 import eduAll.springboot.exception.ResourceNotFoundException;
 
 
@@ -28,6 +27,8 @@ public class CourseController{
 
 	@Autowired
 	private CourseRepository repo;
+	@Autowired
+	private SectionRepository sectionRepo;
 	
 	// get all courses
 	@GetMapping
@@ -35,21 +36,27 @@ public class CourseController{
 		return this.repo.findAll();
 	}
 	
-	//get course by id
-	@GetMapping("/{id}")
-	public Course getCourseById(@PathVariable (value = "id") long course) {
-		return this.repo.findById(course).orElseThrow(
-				() -> new ResourceNotFoundException("course not found"));
-	}
-	
-	//get course by department
-	@RequestMapping(params="dep", method = RequestMethod.GET)
-	public List<Course> getCourseByMajor(@RequestParam("dep") String dep) {
+	//get sections by course name, semester and year
+	@GetMapping("/{course_name}/{semester}/{year}")
+	public List<Section> getCourseByMajor(@PathVariable (value = "course_name") String course_name,
+			@PathVariable (value = "semester") String semester,
+			@PathVariable (value = "year") String year) {
 		List<Course> all = getAllCourse();
-		List<Course> answer = new ArrayList<Course>();
+		Set<Long> course_ids = new HashSet<Long>();
+		List<Section> answer = new ArrayList<Section>();
+		List<Section> sections = sectionRepo.findAll();
 		for (Course course: all) {
-			if (course.getDepartment().equals(dep))
-				answer.add(course);
+			if (course.getName().equals(course_name)) // e.g. CS157A
+				course_ids.add(course.getCourse_id());
+		}
+		// get sections from semester, year, and course_id
+		// PK of section is section_id, course_id, semester, and year
+		for (Section section: sections) {
+			if(course_ids.contains(section.getCourse_id()) 
+					&& section.getSemester().equals(semester) 
+					&& section.getYear().equals(year)) {
+				answer.add(section);
+			}
 		}
 		return answer;
 	}
@@ -58,6 +65,15 @@ public class CourseController{
 	@PostMapping
 	public Course createInstructor(@RequestBody Course course) {
 		return this.repo.save(course);
+	}
+	
+	
+	/*** comment out for unnecessary apis. 
+	//get course by id
+	@GetMapping("/{id}")
+	public Course getCourseById(@PathVariable (value = "id") long course) {
+		return this.repo.findById(course).orElseThrow(
+				() -> new ResourceNotFoundException("course not found"));
 	}
 	
 	//update course
@@ -81,5 +97,6 @@ public class CourseController{
 		this.repo.delete(exist);
 		return ResponseEntity.ok().build();
 	}
+	***/
 	
 }

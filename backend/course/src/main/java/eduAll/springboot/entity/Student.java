@@ -15,32 +15,20 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "sex")
-	private char sex;
-	
 	@Column(name = "year")
 	private int year;
 	
 	@Column(name = "major")
 	private String major;
 	
-	@Column(name = "address")
-	private String address;
-	
 	public Student() {
 		
 	}
 	
-	public Student(String name, char sex, int year, String major, String address) {
+	public Student(int year, String major) {
 		super();
-		this.name = name;
-		this.sex = sex;
 		this.year = year;
 		this.major = major;
-		this.address = address;
 	}
 
 	public long getId() {
@@ -49,22 +37,6 @@ public class Student {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public char getSex() {
-		return sex;
-	}
-
-	public void setSex(char sex) {
-		this.sex = sex;
 	}
 
 	public int getYear() {
@@ -82,13 +54,4 @@ public class Student {
 	public void setMajor(String major) {
 		this.major = major;
 	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
 }

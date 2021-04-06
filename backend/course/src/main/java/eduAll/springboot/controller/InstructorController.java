@@ -50,9 +50,6 @@ public class InstructorController {
 	public Instructor updateInstructor(@RequestBody Instructor instructor, @PathVariable (value = "id") long id) {
 		Instructor exist = this.repo.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException("instructor not found"));
-		exist.setName(instructor.getName());
-		exist.setSex(instructor.getSex());
-		exist.setAge(instructor.getAge());
 		exist.setYear(instructor.getYear());
 		exist.setDepartment(instructor.getDepartment());
 		return this.repo.save(exist);
