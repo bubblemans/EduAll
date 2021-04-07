@@ -1,3 +1,15 @@
+.file-upload {
+
+}
+.cardButton {
+    color: #008CBA;
+}
+.file-card {
+    border: 1px solid black;
+    padding: 2em 2em 2em 2em ;
+    background-color: white;
+}
+
 .App{
     height: 100vh;
     display:flex ;
@@ -80,4 +92,3 @@
 .class-grade {
     margin-top: 0.7em;
 }
-
