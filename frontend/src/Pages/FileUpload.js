@@ -1,43 +1,52 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import FileCard from '../Components/FileCard'
 import { ContextStore } from '../ContextStore';
 
 export default function FileUpload() {
-    const { CurrentUser, SideBar } = useContext(ContextStore);
-    const [ showSidebar, setShowSidebar] = SideBar
-    useEffect(() => {
-        setShowSidebar(true)
-    },[])
+  const { CurrentUser, SideBar } = useContext(ContextStore);
+  const [ showSidebar, setShowSidebar] = SideBar
+  const [ fileData, setFileData] = useState([]);
 
-    const fileData = [
-        {
+  useEffect(() => {
+    setShowSidebar(true);
+    fetchExistingFiles();
+  },[]);
 
-            name:"HW 1",
-            description:"Database Class",
-            date:"04/12/2021"
-        },
-        {
-            name:"Lecture 3",
-            description:"Lecture 3 files",
-            date:"04/11/2021"
-        },
-        {
-            name:"Study guide",
-            description:"a study guide for the test",
-            date:"02/19/2021"
-        },
-        {
-            name:"Final exam",
-            description:"File for the final exam",
-            date:"01/24/2021"
-        }
-    ]
-    return(
-        <div className="file-upload">
-                <input type="file"></input>
-            {fileData.map(item=> {
-                return <FileCard name={item.name}  description={item.description} date={item.date}  />
-            })}
-        </div>
-    )
+  function fetchExistingFiles() {
+    const token = 'cfcd208495d565ef66e7dff9f98764da';
+    const url = 'http://localhost:5000/file?token=' + token;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setFileData(data))
+  }
+
+  async function handleUpload(e) {
+    const file = e.target.files[0];
+    const fileName = file.name;
+    uploadFile(file, fileName)
+      .then(() => {
+        fetchExistingFiles();
+        e.target.value = null;
+      })
+  }
+
+  function uploadFile(file, name) {
+    const token = 'cfcd208495d565ef66e7dff9f98764da';
+    const url = 'http://localhost:5000/file/' + name + '?token=' + token;
+    const formData = new FormData();
+		formData.append('file', file);
+    return fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+  }
+
+  return(
+    <div className="file-upload">
+        <input type="file" onChange={handleUpload}/>
+      {fileData.map(item=> {
+        return <FileCard name={item.name}  description={item.description} date={item.date}  />
+      })}
+    </div>
+  )
 }
