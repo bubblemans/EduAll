@@ -1,5 +1,5 @@
 from flask import Flask, request, abort, send_file, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
 import mongo
@@ -18,17 +18,16 @@ with open('./extensions.txt') as rf:
 
 
 @app.route('/file/<filename>', methods=['POST'])
+@cross_origin(allow_headers=['Content-Type', 'Content-Disposition'])
 def post_file(filename):
 
     def is_allowed_ext(filename):
         extension = filename.split('.')[-1]
         return extension in ALLOWED_EXTENSIONS
-
     if request.method == 'POST':
         f = request.files['file']
         token = request.args.get('token')
         owner = utils.get_user_id(token)
-
         try:
             if is_allowed_ext(filename):
                 mongo.save_file(filename, f, owner)
@@ -38,17 +37,19 @@ def post_file(filename):
             else:
                 return abort(400)
         except mongo.FileError:
+            logging.info('mongo file error')
             return abort(400)
 
 
 @app.route('/file/<filename>', methods=['GET'])
+@cross_origin(allow_headers=['Content-Type', 'Content-Disposition'])
 def get_file(filename):
     token = request.args.get('token')
     owner = utils.get_user_id(token)
 
     try:
-        f = mongo.get_file(filename, owner)
-        return f
+        res = mongo.get_file(filename, owner)
+        return res
     except mongo.FileError:
             return abort(400)
 

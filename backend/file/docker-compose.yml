@@ -20,3 +20,5 @@ services:
       - MONGO_URI=mongodb://db:27017/eduAll
     depends_on:
       - db
+    volumes:
+      - .:/app
