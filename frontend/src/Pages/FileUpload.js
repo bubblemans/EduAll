@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import FileCard from '../Components/FileCard'
+import { ContextStore } from '../ContextStore';
 
 export default function FileUpload() {
-   
-   <div> <button> Hw1 </button></div>
+    const { CurrentUser, SideBar } = useContext(ContextStore);
+    const [ showSidebar, setShowSidebar] = SideBar
+    useEffect(() => {
+        setShowSidebar(true)
+    },[])
+
     const fileData = [
         {
 

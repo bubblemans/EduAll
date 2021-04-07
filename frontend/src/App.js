@@ -21,8 +21,7 @@ export default function App() {
                 <Route path="/" exact component={LoginForm}/>
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
-                <Route path="/file-upload" component={FileUpload}/>
-
+                <Route path="/file" component={FileUpload}/>
             </ContextStore.Provider>
         </Switch>
       </Router>
