@@ -30,7 +30,7 @@ def get_all_files(owner):
         return filename.rstrip(owner)
 
     raw_files = mongo.db.fs.files.find({'owner': owner})
-    return [{'filename': clean_filename(f['filename'])} for f in raw_files]
+    return [{'name': clean_filename(f['filename']), 'date': f['uploadDate']} for f in raw_files]
 
 
 class FileError(Exception):

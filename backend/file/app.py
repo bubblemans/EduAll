@@ -1,5 +1,7 @@
 from flask import Flask, request, abort, send_file, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
+
 import mongo
 import utils
 import logging
@@ -7,6 +9,7 @@ import logging
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 logging.basicConfig(level=logging.DEBUG)
 
