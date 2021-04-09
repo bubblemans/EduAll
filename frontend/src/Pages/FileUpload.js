@@ -4,7 +4,8 @@ import { ContextStore } from '../ContextStore';
 
 export default function FileUpload() {
   const { CurrentUser, SideBar } = useContext(ContextStore);
-  const [ showSidebar, setShowSidebar] = SideBar
+  const [ showSidebar, setShowSidebar] = SideBar;
+  const [ user, setUser ] = CurrentUser;
   const [ fileData, setFileData] = useState([]);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function FileUpload() {
   },[]);
 
   function fetchExistingFiles() {
-    const token = 'cfcd208495d565ef66e7dff9f98764da';
+    const token = user.token;
     const url = 'http://localhost:5000/file?token=' + token;
     fetch(url)
       .then(res => res.json())
@@ -31,7 +32,7 @@ export default function FileUpload() {
   }
 
   function uploadFile(file, name) {
-    const token = 'cfcd208495d565ef66e7dff9f98764da';
+    const token = user.token;
     const url = 'http://localhost:5000/file/' + name + '?token=' + token;
     const formData = new FormData();
 		formData.append('file', file);

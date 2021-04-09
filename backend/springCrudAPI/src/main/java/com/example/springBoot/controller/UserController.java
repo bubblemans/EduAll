@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.springBoot.repository.UserRepository;
 import com.example.springBoot.entity.User;
@@ -31,12 +32,14 @@ public class UserController {
 
 	//Get all users
 	@GetMapping
+	@CrossOrigin(origins = "*")
 	public List<User> getAllUsers(){
 		return this.userRepository.findAll();
 	}
 
 	//Get the user by ID
 	@GetMapping("/{id}")
+	@CrossOrigin(origins = "*")
 	public User getUserByID(@PathVariable(value = "id") long userId) {
 
 		if(this.userRepository.existsById(userId)) {
@@ -49,8 +52,15 @@ public class UserController {
 		}
 	}
 
+	@GetMapping("/{email}/{Password}")
+	@CrossOrigin(origins = "*")
+	public User getUserByEmailPassword(@PathVariable(value = "email") String email, @PathVariable(value = "Password") String Password) {
+		return this.userRepository.searchByEmailAndPWD(email, Password);
+	}
+
 	//Create user
 	@PostMapping
+	@CrossOrigin(origins = "*")
 	public User createUser(@RequestBody User user) {
 		String tk = user.generateToken(user.getID());
 		user.setToken(tk);
@@ -60,6 +70,7 @@ public class UserController {
 
 	//Update user
 	@PutMapping("/{id}")
+	@CrossOrigin(origins = "*")
 	public User updateUser(@RequestBody User user, @PathVariable("id") long userId) {
 
 		if(this.userRepository.existsById(userId)) {
@@ -81,6 +92,7 @@ public class UserController {
 
 	//Delete user by ID
 	@DeleteMapping("/{id}/")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") long userId){
 
 		if(this.userRepository.existsById(userId)) {
@@ -96,6 +108,7 @@ public class UserController {
 
 	//Get userId by Token
 	@GetMapping("/{id}/token")
+	@CrossOrigin(origins = "*")
 	@ResponseBody
 	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
 		String userId = "", jsId = "";
