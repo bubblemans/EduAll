@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LoginForm from './Pages/Loginform'
+import SignupForm from './Pages/SignupForm'
 import RegisterPage from './Pages/RegisterPage';
 import Dashboard from './Pages/Dashboard';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -19,6 +20,7 @@ export default function App() {
         <Switch>        
             <ContextStore.Provider value={{ CurrentUser: [user,setUser], SideBar: [showSidebar, setShowSidebar]}}>
                 <Route path="/" exact component={LoginForm}/>
+                <Route path="/signup" exact component={SignupForm}/>
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/file" component={FileUpload}/>
