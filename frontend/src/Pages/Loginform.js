@@ -29,7 +29,7 @@ export default function Loginform() {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        setUser(formDetails.name)
+        setUser(data)
         history.push("/dashboard")
       })
 
