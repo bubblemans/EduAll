@@ -60,6 +60,8 @@ app.put('/contacts/:token', (req, res) => {
   const token = req.params.token;
   getUserId(token).then(userId => {
     const contacts = req.body.contacts;
+    console.log(req);
+    console.log(req.body);
     const additionals = req.body.additionals;
     addContacts(contacts, additionals).then(
       res.sendStatus(200)

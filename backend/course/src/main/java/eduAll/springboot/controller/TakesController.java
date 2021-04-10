@@ -1,24 +1,19 @@
 package eduAll.springboot.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import eduAll.springboot.repository.StudentRepository;
 import eduAll.springboot.repository.TakesRepository;
-import eduAll.springboot.entity.Section;
-import eduAll.springboot.entity.Student;
 import eduAll.springboot.entity.Takes;
+import eduAll.springboot.entity.Section;
 import eduAll.springboot.exception.ResourceNotFoundException;
 
 
@@ -29,8 +24,7 @@ public class TakesController{
 
 	@Autowired
 	private TakesRepository repo;
-	@Autowired
-	private StudentRepository studentRepo;
+	
 	
 	// get all takes
 	@GetMapping
@@ -38,57 +32,63 @@ public class TakesController{
 		return this.repo.findAll();
 	}
 	
-	// get all grades by a student id
-	// assume student cannot take same course 
-	@GetMapping("/{id}")
-	public List<Takes> getGradesByStudent(@PathVariable (value = "id") long student) {
+	// get all grades by a student id in current semester
+	@GetMapping("/{token}/{semester}/{year}")
+	public List<Takes> getGradesByStudent(@PathVariable (value = "token") String token,
+			@PathVariable (value = "semester") String semester,
+			@PathVariable (value = "year") String year) throws Exception {
+		
+		long student = HttpRequest.getUserId(token);
 		List<Takes> grades = new ArrayList<Takes>();
 		List<Takes> all = getAllTakes();
 		for (Takes take: all) {
-			if(take.getStudent_id() == student)
+			if(take.getStudent_id() == student && take.getSemester().equals(semester) 
+					&& take.getYear().equals(year))
 				grades.add(take);
 		}
-		if(grades.isEmpty())
-			throw new ResourceNotFoundException("grades not found");
 		return grades;		
 	}
 	
-	//get a grade by student_id and course_id
-	// assume student cannot take same course 
-	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.GET)
-	public String getTakesByCourse(@PathVariable (value = "id") long student, 
-			@PathVariable (value = "course_id") long course) {
+	
+	public List<Long> getStudentsBySection(Section section){
+		List<Long> students = new ArrayList<Long>();
 		List<Takes> all = getAllTakes();
-		for (Takes take: all) {
-			if(take.getStudent_id() == student && take.getCourse_id() == course)
-				return take.getGrade();
+		long section_id = section.getSection_id();
+		long course_id = section.getCourse_id();
+		String semester = section.getSemester();
+		String year = section.getYear();
+		for (Takes takes: all) {
+			if (takes.getSection_id() == section_id && takes.getCourse_id() == course_id
+					&& takes.getSemester().equals(semester) && takes.getYear().equals(year))
+				students.add(takes.getStudent_id());
 		}
-		throw new ResourceNotFoundException("grade not found");
+		return students;
 	}
 	
+	/*
+	 * 1. save many takes
+	 * 2. call POST method to chat service
+	 *  -> create request
+	 */
 	//create a grade
-	@PostMapping
-	public Takes createTakes(@RequestBody Takes takes) {
-		return this.repo.save(takes);
-		
-		/* prevent from creating wrong mappings
-		SectionController co = new SectionController();
-		List<Student> students = studentRepo.findAll();
-		long id = takes.getStudent_id();
-		long course_id = takes.getCourse_id();
-		long section_id = takes.getSection_id();
-		String semester = takes.getSemester();
-		String year = takes.getYear();
-		for(Student student: students) {
-			if(student.getId() == id) {
-				if(co.checkExist(course_id, section_id, semester, year))
-					return this.repo.save(takes);
-				break;
-			}
+	@RequestMapping(path = "/{token}", method=RequestMethod.POST,consumes="application/json",produces="application/json")
+	@ResponseBody
+	public List<Takes> createTakes(@PathVariable (value = "token") String token,
+			@RequestBody Section[] sections) throws Exception {
+		List<Takes> retVal = new ArrayList<Takes>();
+		long userId = HttpRequest.getUserId(token);
+		String semester = sections[0].getSemester(); // assume user chooses at least one section
+		String year = sections[0].getYear();
+		for (Section section: sections) {
+			HttpRequest.updateContacts(token, getStudentsBySection(section));
+			retVal.add(this.repo.save(
+					new Takes(userId, section.getSection_id(),
+					section.getCourse_id(), semester, year, null))
+			);
 		}
-		throw new ResourceNotFoundException("section not found");
-		*/
+		return retVal;
 	}
+	
 	
 	//update a grade  student id + course id
 	//@PutMapping("/{id}/{course_id}")
@@ -104,6 +104,21 @@ public class TakesController{
 			}
 		}
 		throw new ResourceNotFoundException("section not found");
+	}
+	
+	/***
+
+	//get a grade by student_id and course_id
+	//assume student cannot take the same course 
+	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.GET)
+	public String getTakesByCourse(@PathVariable (value = "id") long student, 
+			@PathVariable (value = "course_id") long course) {
+		List<Takes> all = getAllTakes();
+		for (Takes take: all) {
+			if(take.getStudent_id() == student && take.getCourse_id() == course)
+				return take.getGrade();
+		}
+		throw new ResourceNotFoundException("grade not found");
 	}
 	
 	// delete all grades of a student
@@ -130,4 +145,5 @@ public class TakesController{
 		}
 		return ResponseEntity.ok().build();
 	}
+	***/
 }

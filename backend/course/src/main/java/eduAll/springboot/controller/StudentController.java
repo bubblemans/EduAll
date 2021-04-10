@@ -40,9 +40,18 @@ public class StudentController {
 	}
 	
 	//create student
+	//need id, year, and major to create
 	@PostMapping
 	public Student createStudent(@RequestBody Student student) {
 		return this.repo.save(student);
+	}
+	
+	//create student by passing token, year, and major
+	@PostMapping("/{token}/{year}/{major}")
+	public Student createStudent(@PathVariable (value = "token") String token,
+			@PathVariable (value = "year") int year,
+			@PathVariable (value = "major") String major) throws Exception {
+		return this.repo.save(new Student(HttpRequest.getUserId(token),year,major));
 	}
 	
 	//update student

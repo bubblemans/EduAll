@@ -25,12 +25,6 @@ public class Takes {
 	@Id
 	private String year;
 	
-	@Column(name = "timeslot")
-	private String timeslot;
-	
-	@Column(name = "capacity")
-	private int capacity;
-	
 	@Column(name = "grade")
 	private String grade;
 	
@@ -38,16 +32,13 @@ public class Takes {
 		
 	}
 
-	public Takes(long student_id, long section_id, long course_id, String semester, String year, String timeslot,
-			int capacity, String grade) {
+	public Takes(long student_id, long section_id, long course_id, String semester, String year, String grade) {
 		super();
 		this.student_id = student_id;
 		this.section_id = section_id;
 		this.course_id = course_id;
 		this.semester = semester;
 		this.year = year;
-		this.timeslot = timeslot;
-		this.capacity = capacity;
 		this.grade = grade;
 	}
 
@@ -89,22 +80,6 @@ public class Takes {
 
 	public void setYear(String year) {
 		this.year = year;
-	}
-
-	public String getTimeslot() {
-		return timeslot;
-	}
-
-	public void setTimeslot(String timeslot) {
-		this.timeslot = timeslot;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
 	}
 
 	public String getGrade() {

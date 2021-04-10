@@ -5,11 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,20 +36,8 @@ public class SectionController{
 		return this.repo.findAll();
 	}
 	
-	/* prevent from creating wrong mappings (takes, teaches)
-	public boolean checkExist(long course_id, long section_id, String semester, String year) {
-		List<Section> all = getAllSection();
-		for (Section section: all) {
-			if(section.getCourse_id() == course_id && section.getSection_id() == section_id
-					&& section.getSemester().equals(semester) && section.getYear().equals(year))
-				return true;
-		}
-		return false;
-	}
-	*/
-	
-	//get a section by course_id and section_id
-	@RequestMapping(path = "/{course_id}/{section_id}/{semester}/{year}", method = RequestMethod.GET)
+	//get one section by section PKs
+	@GetMapping("/{course_id}/{section_id}/{semester}/{year}")
 	public Section getSectionById(@PathVariable (value = "course_id") long course_id,
 			@PathVariable (value = "section_id") long section_id,
 			@PathVariable (value = "semester") String semester,
@@ -66,8 +51,8 @@ public class SectionController{
 		throw new ResourceNotFoundException("section not found");
 	}
 	
-	//get sections by semester and year
-	@RequestMapping(path = "/{semester}/{year}", method = RequestMethod.GET)
+	//get sections by semester and year 
+	@GetMapping("/{semester}/{year}")
 	public List<Section> getSectionBySemYear(
 			@PathVariable (value = "semester") String semester,
 			@PathVariable (value = "year") String year) {
@@ -77,25 +62,61 @@ public class SectionController{
 			if(section.getSemester().equals(semester) && section.getYear().equals(year))
 				sections.add(section);
 		}
-		if(sections.isEmpty())
-			throw new ResourceNotFoundException("section not found");
 		return sections;
-	}
+	}	
 	
-	//get section by semesters
-	@RequestMapping(params="semester", method = RequestMethod.GET)
-	public List<Section> getSectionsBySem(@RequestParam("semester") String semester){
-		List<Section> all = getAllSection();
+	
+	// get sections by one student in current semester
+	@GetMapping("/{token}/{semester}/{year}")
+	public List<Section> getSectionsByStudent(@PathVariable (value = "token") String token,
+			@PathVariable (value = "semester") String semester,
+			@PathVariable (value = "year") String year) throws Exception {
+		
+		long student = HttpRequest.getUserId(token);
+		List<Section> AllSections = getAllSection();
+		List<Takes> all = this.takesRepo.findAll();
 		List<Section> sections = new ArrayList<Section>();
-		for (Section section: all) {
-			if(section.getSemester().equals(semester))
-				sections.add(section);
+		long course_id, section_id;
+		for (Takes take: all) {
+			if(take.getStudent_id() == student && take.getSemester().equals(semester) && take.getYear().equals(year)) {
+				course_id = take.getCourse_id();
+				section_id = take.getSection_id();
+				for (Section section: AllSections) {
+					// student may have taken the section before
+					if(section.getCourse_id() == course_id && section.getSection_id() == section_id
+							&& section.getSemester().equals(semester) && section.getYear().equals(year)) {
+						sections.add(section);
+						break;
+					}		
+				}
+			}
 		}
-		if(sections.isEmpty())
-			throw new ResourceNotFoundException("section not found");
 		return sections;
 	}
 	
+	//create section
+	@PostMapping
+	public Section createSection(@RequestBody Section section) {
+		List<Course> all = this.courseRepo.findAll();
+		long id = section.getCourse_id();
+		for(Course course: all) {
+			if(id == course.getCourse_id())
+				return this.repo.save(section);
+		}
+		throw new ResourceNotFoundException("section not found");
+	}
+	
+	/*** unnecessary APIs 
+	// prevent from creating wrong mappings (takes, teaches)
+	public boolean checkExist(long course_id, long section_id, String semester, String year) {
+		List<Section> all = getAllSection();
+		for (Section section: all) {
+			if(section.getCourse_id() == course_id && section.getSection_id() == section_id
+					&& section.getSemester().equals(semester) && section.getYear().equals(year))
+				return true;
+		}
+		return false;
+	}
 	
 	// get sections by course_id
 	@RequestMapping(params="course_id", method = RequestMethod.GET)
@@ -135,17 +156,6 @@ public class SectionController{
 		return sections;
 	}
 	
-	//create section
-	@PostMapping
-	public Section createSection(@RequestBody Section section) {
-		List<Course> all = this.courseRepo.findAll();
-		long id = section.getCourse_id();
-		for(Course course: all) {
-			if(id == course.getCourse_id())
-				return this.repo.save(section);
-		}
-		throw new ResourceNotFoundException("section not found");
-	}
 	
 	//update section
 	@RequestMapping(path = "/{course_id}/{section_id}/{semester}/{year}", method = RequestMethod.PUT)
@@ -174,4 +184,5 @@ public class SectionController{
 		this.repo.delete(exist);
 		return ResponseEntity.ok().build();
 	}
+	***/
 }

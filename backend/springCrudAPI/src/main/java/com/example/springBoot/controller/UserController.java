@@ -100,7 +100,6 @@ public class UserController {
 	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
 		String userId = "", jsId = "";
 		Map<String, Object> js = new LinkedHashMap<>();
-
 		try {
 			User user2 = userRepository.searchByToken(token);
 			userId = String.valueOf(user2.getID());

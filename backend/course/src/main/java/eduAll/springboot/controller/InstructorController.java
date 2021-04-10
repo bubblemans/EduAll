@@ -40,9 +40,17 @@ public class InstructorController {
 	}
 	
 	//create instructor
-	@PostMapping
+	@PostMapping // need id, year, and department to create
 	public Instructor createInstructor(@RequestBody Instructor instructor) {
 		return this.repo.save(instructor);
+	}
+	
+	//create instructor by passing token, year, and major
+	@PostMapping("/{token}/{year}/{department}")
+	public Instructor createStudent(@PathVariable (value = "token") String token,
+			@PathVariable (value = "year") int year,
+			@PathVariable (value = "department") String department) throws Exception {
+		return this.repo.save(new Instructor(HttpRequest.getUserId(token),year,department));
 	}
 	
 	//update instructor

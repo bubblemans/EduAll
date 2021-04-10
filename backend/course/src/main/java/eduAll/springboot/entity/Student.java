@@ -3,16 +3,13 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "student")
 
 public class Student {
 	
-	@Id // token
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id // match with user id
 	private long id;
 	
 	@Column(name = "year")
@@ -25,8 +22,9 @@ public class Student {
 		
 	}
 	
-	public Student(int year, String major) {
+	public Student(long id, int year, String major) {
 		super();
+		this.id = id;
 		this.year = year;
 		this.major = major;
 	}
