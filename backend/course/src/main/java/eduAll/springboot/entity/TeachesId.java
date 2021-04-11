@@ -11,11 +11,11 @@ public class TeachesId implements Serializable{
 	private long section_id;
 	private long course_id;
 	private String semester;
-	private String year;
+	private int year;
 	
 	public TeachesId() {}
 	
-	public TeachesId(long id, long section_id, long course_id, String semester, String year) {
+	public TeachesId(long id, long section_id, long course_id, String semester, int year) {
 		super();
 		this.id = id;
 		this.section_id = section_id;
@@ -64,10 +64,10 @@ public class TeachesId implements Serializable{
 	public void setSemester(String semester) {
 		this.semester = semester;
 	}
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 }

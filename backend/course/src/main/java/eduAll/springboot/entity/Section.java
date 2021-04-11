@@ -1,27 +1,27 @@
 package eduAll.springboot.entity;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import javax.persistence.Column;
 
 @Entity
 @Table(name = "section")
-@IdClass(SectionId.class)
 public class Section{
 
-	@Id
+	@Id // token
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	
 	private long section_id;
 	
-	@Id
 	private long course_id;
-
-	@Id
+	
 	private String semester;
 
-	@Id
-	private String year;
+	private int year;
 	
 	@Column(name = "timeslot")
 	private String timeslot;
@@ -33,7 +33,7 @@ public class Section{
 		
 	}
 
-	public Section(long section_id, long course_id, String semester, String year, String timeslot, int capacity) {
+	public Section(long section_id, long course_id, String semester, int year, String timeslot, int capacity) {
 		super();
 		this.section_id = section_id;
 		this.course_id = course_id;
@@ -41,6 +41,10 @@ public class Section{
 		this.year = year;
 		this.timeslot = timeslot;
 		this.capacity = capacity;
+	}
+	
+	public long getId() {
+		return id;
 	}
 
 	public long getSection_id() {
@@ -67,11 +71,11 @@ public class Section{
 		this.semester = semester;
 	}
 
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 

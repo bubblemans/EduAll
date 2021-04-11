@@ -36,7 +36,7 @@ public class CourseController{
 	@GetMapping("/{course_name}/{semester}/{year}")
 	public List<Section> getCourseByName_Sem(@PathVariable (value = "course_name") String course_name,
 			@PathVariable (value = "semester") String semester,
-			@PathVariable (value = "year") String year) {
+			@PathVariable (value = "year") int year) {
 		List<Course> all = getAllCourse();
 		Set<Long> course_ids = new HashSet<Long>();
 		List<Section> answer = new ArrayList<Section>();
@@ -50,7 +50,7 @@ public class CourseController{
 		for (Section section: sections) {
 			if(course_ids.contains(section.getCourse_id()) 
 					&& section.getSemester().equals(semester) 
-					&& section.getYear().equals(year)) {
+					&& section.getYear() == year) {
 				answer.add(section);
 			}
 		}

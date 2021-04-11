@@ -3,43 +3,49 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.persistence.Column;
 
 @Entity
 @Table(name = "takes")
 @IdClass(TakesId.class)
 public class Takes {
 	
+	@Id // primary key of section
+	private long id;
+	
 	@Id
 	private long student_id;
 	
-	@Id
-	private long section_id;
+	private long section_id; // just a section number  (CS160 section 1)
 	
-	@Id
 	private long course_id;
 	
-	@Id
 	private String semester;
+
+	private int year;
 	
-	@Id
-	private String year;
-	
-	@Column(name = "grade")
 	private String grade;
 	
 	public Takes() {
 		
 	}
 
-	public Takes(long student_id, long section_id, long course_id, String semester, String year, String grade) {
+	public Takes(long id, long student_id, long section_id, long course_id, String semester, int year, String grade) {
 		super();
+		this.id = id;
 		this.student_id = student_id;
 		this.section_id = section_id;
 		this.course_id = course_id;
 		this.semester = semester;
 		this.year = year;
 		this.grade = grade;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public long getStudent_id() {
@@ -74,11 +80,11 @@ public class Takes {
 		this.semester = semester;
 	}
 
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 
@@ -89,4 +95,5 @@ public class Takes {
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
+	
 }

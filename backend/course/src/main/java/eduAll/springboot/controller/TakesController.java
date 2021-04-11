@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
+import eduAll.springboot.repository.SectionRepository;
 import eduAll.springboot.repository.TakesRepository;
 import eduAll.springboot.entity.Takes;
 import eduAll.springboot.entity.Section;
@@ -24,6 +25,8 @@ public class TakesController{
 
 	@Autowired
 	private TakesRepository repo;
+	@Autowired
+	private SectionRepository sectionRepo;
 	
 	
 	// get all takes
@@ -32,59 +35,50 @@ public class TakesController{
 		return this.repo.findAll();
 	}
 	
-	// get all grades by a student id in current semester
-	@GetMapping("/{token}/{semester}/{year}")
-	public List<Takes> getGradesByStudent(@PathVariable (value = "token") String token,
-			@PathVariable (value = "semester") String semester,
-			@PathVariable (value = "year") String year) throws Exception {
-		
+	// get all grades by one student in current semester
+	@GetMapping("/{token}")
+	public List<Takes> getGradesByStudent(@PathVariable (value = "token") String token) throws Exception {
+		String semester = "Spring";
+		int year = 2021;
 		long student = HttpRequest.getUserId(token);
 		List<Takes> grades = new ArrayList<Takes>();
-		List<Takes> all = getAllTakes();
-		for (Takes take: all) {
+		for (Takes take: getAllTakes()) {
 			if(take.getStudent_id() == student && take.getSemester().equals(semester) 
-					&& take.getYear().equals(year))
+					&& take.getYear() == year)
 				grades.add(take);
 		}
 		return grades;		
 	}
 	
-	
-	public List<Long> getStudentsBySection(Section section){
+	// get students who enrolled in the section
+	public List<Long> getStudentsBySection(long id){
 		List<Long> students = new ArrayList<Long>();
-		List<Takes> all = getAllTakes();
-		long section_id = section.getSection_id();
-		long course_id = section.getCourse_id();
-		String semester = section.getSemester();
-		String year = section.getYear();
-		for (Takes takes: all) {
-			if (takes.getSection_id() == section_id && takes.getCourse_id() == course_id
-					&& takes.getSemester().equals(semester) && takes.getYear().equals(year))
+		for (Takes takes: getAllTakes()) {
+			if (takes.getId() == id)
 				students.add(takes.getStudent_id());
 		}
 		return students;
 	}
 	
-	/*
-	 * 1. save many takes
-	 * 2. call POST method to chat service
-	 *  -> create request
-	 */
-	//create a grade
+	
+	//create takes for section registration
 	@RequestMapping(path = "/{token}", method=RequestMethod.POST,consumes="application/json",produces="application/json")
 	@ResponseBody
-	public List<Takes> createTakes(@PathVariable (value = "token") String token,
-			@RequestBody Section[] sections) throws Exception {
-		List<Takes> retVal = new ArrayList<Takes>();
+	public List<Long> createTakes(@PathVariable (value = "token") String token,
+			@RequestBody long[] sectionIds) throws Exception {
+		List<Long> retVal = new ArrayList<Long>();
 		long userId = HttpRequest.getUserId(token);
-		String semester = sections[0].getSemester(); // assume user chooses at least one section
-		String year = sections[0].getYear();
-		for (Section section: sections) {
-			HttpRequest.updateContacts(token, getStudentsBySection(section));
-			retVal.add(this.repo.save(
-					new Takes(userId, section.getSection_id(),
-					section.getCourse_id(), semester, year, null))
-			);
+		for (long id: sectionIds) {
+			HttpRequest.updateContacts(token, getStudentsBySection(id));
+			retVal.add(id);
+			for(Section section: this.sectionRepo.findAll()){
+				if(section.getId() == id) {
+					this.repo.save(
+							new Takes(id, userId, section.getSection_id(), section.getCourse_id(), 
+									section.getSemester(), section.getYear(), null));
+					break;
+				}
+			}
 		}
 		return retVal;
 	}

@@ -23,13 +23,13 @@ public class Teaches {
 	private String semester;
 	
 	@Id
-	private String year;
+	private int year;
 	
 	public Teaches() {
 		
 	}
 
-	public Teaches(long id, long section, long course, String semester, String year) {
+	public Teaches(long id, long section, long course, String semester, int year) {
 		super();
 		this.id = id;
 		this.section_id = section;
@@ -70,11 +70,11 @@ public class Teaches {
 		this.semester = semester;
 	}
 
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 }

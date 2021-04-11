@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 
 public class Course {
 	
-	@Id // token
+	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	

@@ -31,35 +31,21 @@ public class SectionController{
 	private CourseRepository courseRepo;
 	
 	// get all sections
-	@GetMapping
 	public List<Section> getAllSection(){
 		return this.repo.findAll();
 	}
 	
-	//get one section by section PKs
-	@GetMapping("/{course_id}/{section_id}/{semester}/{year}")
-	public Section getSectionById(@PathVariable (value = "course_id") long course_id,
-			@PathVariable (value = "section_id") long section_id,
-			@PathVariable (value = "semester") String semester,
-			@PathVariable (value = "year") String year) {
-		List<Section> all = getAllSection();
-		for (Section section: all) {
-			if(section.getCourse_id() == course_id && section.getSection_id() == section_id
-					&& section.getSemester().equals(semester) && section.getYear().equals(year))
-				return section;
-		}
-		throw new ResourceNotFoundException("section not found");
-	}
-	
-	//get sections by semester and year 
-	@GetMapping("/{semester}/{year}")
-	public List<Section> getSectionBySemYear(
-			@PathVariable (value = "semester") String semester,
-			@PathVariable (value = "year") String year) {
-		List<Section> all = getAllSection();
+	//get sections by current semester and year 
+	@GetMapping
+	public List<Section> getSectionBySemYear() {
+		
+		// statically define current semester for now.
+		String semester = "Spring";
+		int year = 2021;
 		List<Section> sections = new ArrayList<Section>();
-		for (Section section: all) {
-			if(section.getSemester().equals(semester) && section.getYear().equals(year))
+		
+		for (Section section: getAllSection()) {
+			if(section.getSemester().equals(semester) && section.getYear() == year)
 				sections.add(section);
 		}
 		return sections;
@@ -67,24 +53,26 @@ public class SectionController{
 	
 	
 	// get sections by one student in current semester
-	@GetMapping("/{token}/{semester}/{year}")
-	public List<Section> getSectionsByStudent(@PathVariable (value = "token") String token,
-			@PathVariable (value = "semester") String semester,
-			@PathVariable (value = "year") String year) throws Exception {
+	// might be used for home page later  
+	@GetMapping("/{token}")
+	public List<Section> getSectionsByStudent(@PathVariable (value = "token") String token) throws Exception {
+		
+		String semester = "Spring";
+		int year = 2021;
 		
 		long student = HttpRequest.getUserId(token);
 		List<Section> AllSections = getAllSection();
-		List<Takes> all = this.takesRepo.findAll();
+		List<Takes> allTakes = this.takesRepo.findAll();
 		List<Section> sections = new ArrayList<Section>();
 		long course_id, section_id;
-		for (Takes take: all) {
-			if(take.getStudent_id() == student && take.getSemester().equals(semester) && take.getYear().equals(year)) {
+		for (Takes take: allTakes) {
+			if(take.getStudent_id() == student && take.getSemester().equals(semester) && take.getYear() == year) {
 				course_id = take.getCourse_id();
 				section_id = take.getSection_id();
 				for (Section section: AllSections) {
 					// student may have taken the section before
 					if(section.getCourse_id() == course_id && section.getSection_id() == section_id
-							&& section.getSemester().equals(semester) && section.getYear().equals(year)) {
+							&& section.getSemester().equals(semester) && section.getYear() == year) {
 						sections.add(section);
 						break;
 					}		
@@ -116,6 +104,21 @@ public class SectionController{
 				return true;
 		}
 		return false;
+	}
+	
+	//get one section by section PKs
+	@GetMapping("/{course_id}/{section_id}/{semester}/{year}")
+	public Section getSectionById(@PathVariable (value = "course_id") long course_id,
+			@PathVariable (value = "section_id") long section_id,
+			@PathVariable (value = "semester") String semester,
+			@PathVariable (value = "year") String year) {
+		List<Section> all = getAllSection();
+		for (Section section: all) {
+			if(section.getCourse_id() == course_id && section.getSection_id() == section_id
+					&& section.getSemester().equals(semester) && section.getYear().equals(year))
+				return section;
+		}
+		throw new ResourceNotFoundException("section not found");
 	}
 	
 	// get sections by course_id
