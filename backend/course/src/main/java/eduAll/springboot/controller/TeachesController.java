@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -26,6 +27,7 @@ import eduAll.springboot.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/eduall/teaches")
+@CrossOrigin(origins = "*")
 public class TeachesController{
 
 	@Autowired
@@ -34,15 +36,15 @@ public class TeachesController{
 	private SectionRepository sectionRepo;
 	@Autowired
 	private InstructorRepository instructorRepo;
-	
-	
+
+
 	// get all teaches
 	@GetMapping
 	public List<Teaches> getAllTeaches(){
 		return this.repo.findAll();
 	}
-	
-	// get all sections by an instructor id 
+
+	// get all sections by an instructor id
 	@RequestMapping(params="id", method = RequestMethod.GET)
 	public List<Section> getAllSection(@RequestParam("id") long id){
 		List<Teaches> all = getAllTeaches();
@@ -54,7 +56,7 @@ public class TeachesController{
 				course_id = teach.getCourse_id();
 				section_id = teach.getSection_id();
 				for(Section section: sections) {
-					if(section.getCourse_id() == course_id && 
+					if(section.getCourse_id() == course_id &&
 							section.getSection_id() == section_id)
 						answer.add(section);
 				}
@@ -65,7 +67,7 @@ public class TeachesController{
 		}
 		return answer;
 	}
-	
+
 	// get all instructors by a course id
 	@RequestMapping(params="course_id", method = RequestMethod.GET)
 	public List<Instructor> getAllInstructor(@RequestParam("course_id") long course){
@@ -86,12 +88,12 @@ public class TeachesController{
 		}
 		return answer;
 	}
-	
+
 	//create teaches
 	@PostMapping
 	public Teaches createTeaches(@RequestBody Teaches teaches) {
 		return this.repo.save(teaches);
-		
+
 		/* prevent from creating wrong mappings
 		SectionController co = new SectionController();
 		List<Instructor> instructors = instructorRepo.findAll();
@@ -110,10 +112,10 @@ public class TeachesController{
 		throw new ResourceNotFoundException("grade not found");
 		*/
 	}
-	
+
 	//update teaches -> all is PK, not allowed. just delete
-	
-	// delete teaches by instructor id 
+
+	// delete teaches by instructor id
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Teaches> deleteSection(@PathVariable (value = "id") long id){
 		List<Teaches> all = getAllTeaches();
@@ -123,10 +125,10 @@ public class TeachesController{
 		}
 		return ResponseEntity.ok().build();
 	}
-	
+
 	// delete one teaches by instructor and course_id
 	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Section> deleteOne(@PathVariable (value = "id") long student, 
+	public ResponseEntity<Section> deleteOne(@PathVariable (value = "id") long student,
 			@PathVariable (value = "course_id") long course){
 		List<Teaches> all = getAllTeaches();
 		for (Teaches teach: all) {

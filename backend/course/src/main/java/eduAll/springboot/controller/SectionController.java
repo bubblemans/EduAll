@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import eduAll.springboot.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/eduall/section")
+@CrossOrigin(origins = "*")
 public class SectionController{
 
 	@Autowired
@@ -29,21 +31,21 @@ public class SectionController{
 	private TakesRepository takesRepo;
 	@Autowired
 	private CourseRepository courseRepo;
-	
+
 	// get all sections
 	public List<Section> getAllSection(){
 		return this.repo.findAll();
 	}
-	
-	//get sections by current semester and year 
+
+	//get sections by current semester and year
 	@GetMapping
 	public List<Section> getSectionBySemYear() {
-		
+
 		// statically define current semester for now.
 		String semester = "Spring";
 		int year = 2021;
 		List<Section> sections = new ArrayList<Section>();
-		
+
 		for (Section section: getAllSection()) {
 			if(section.getSemester().equals(semester) && section.getYear() == year)
 				sections.add(section);
@@ -56,10 +58,10 @@ public class SectionController{
 	// might be used for home page later  
 	@GetMapping("/{token}")
 	public List<Section> getSectionsByStudent(@PathVariable (value = "token") String token) throws Exception {
-		
+
 		String semester = "Spring";
 		int year = 2021;
-		
+
 		long student = HttpRequest.getUserId(token);
 		List<Section> AllSections = getAllSection();
 		List<Takes> allTakes = this.takesRepo.findAll();
@@ -73,13 +75,13 @@ public class SectionController{
 					if(id == section.getId()) {
 						sections.add(section);
 						break;
-					}		
+					}
 				}
 			}
 		}
 		return sections;
 	}
-	
+
 	//create section
 	@PostMapping
 	public Section createSection(@RequestBody Section section) {
@@ -91,8 +93,8 @@ public class SectionController{
 		}
 		throw new ResourceNotFoundException("section not found");
 	}
-	
-	/*** unnecessary APIs 
+
+	/*** unnecessary APIs
 	// prevent from creating wrong mappings (takes, teaches)
 	public boolean checkExist(long course_id, long section_id, String semester, String year) {
 		List<Section> all = getAllSection();
@@ -103,7 +105,7 @@ public class SectionController{
 		}
 		return false;
 	}
-	
+
 	//get one section by section PKs
 	@GetMapping("/{course_id}/{section_id}/{semester}/{year}")
 	public Section getSectionById(@PathVariable (value = "course_id") long course_id,
@@ -118,7 +120,7 @@ public class SectionController{
 		}
 		throw new ResourceNotFoundException("section not found");
 	}
-	
+
 	// get sections by course_id
 	@RequestMapping(params="course_id", method = RequestMethod.GET)
 	public List<Section> getSectionsByCourse(@RequestParam("course_id") long course){
@@ -132,7 +134,7 @@ public class SectionController{
 			throw new ResourceNotFoundException("section not found");
 		return sections;
 	}
-	
+
 	// get all sections by one student
 	@RequestMapping(params="student_id", method = RequestMethod.GET)
 	public List<Section> getSectionsByStudent(@RequestParam("student_id") long student) {
@@ -148,19 +150,19 @@ public class SectionController{
 					if(section.getCourse_id() == course_id && section.getSection_id() == section_id) {
 						sections.add(section);
 						break;
-					}		
+					}
 				}
-			}	
+			}
 		}
 		if(sections.isEmpty())
 			throw new ResourceNotFoundException("section not found");
 		return sections;
 	}
-	
-	
+
+
 	//update section
 	@RequestMapping(path = "/{course_id}/{section_id}/{semester}/{year}", method = RequestMethod.PUT)
-	public Section updateSection(@RequestBody Section section, 
+	public Section updateSection(@RequestBody Section section,
 			@PathVariable (value = "course_id") long course_id,
 			@PathVariable (value = "section_id") long section_id,
 			@PathVariable (value = "semester") String semester,
@@ -174,7 +176,7 @@ public class SectionController{
 		exist.setCapacity(section.getCapacity());
 		return this.repo.save(exist);
 	}
-	
+
 	// delete section by id
 	@RequestMapping(path = "/{course_id}/{section_id}/{semester}/{year}", method = RequestMethod.DELETE)
 	public ResponseEntity<Section> deleteSection(@PathVariable (value = "course_id") long course_id,

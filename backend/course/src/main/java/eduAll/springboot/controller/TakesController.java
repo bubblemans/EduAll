@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -21,20 +22,21 @@ import eduAll.springboot.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/eduall/grade")
+@CrossOrigin(origins = "*")
 public class TakesController{
 
 	@Autowired
 	private TakesRepository repo;
 	@Autowired
 	private SectionRepository sectionRepo;
-	
-	
+
+
 	// get all takes
 	@GetMapping
 	public List<Takes> getAllTakes(){
 		return this.repo.findAll();
 	}
-	
+
 	// get all grades by one student in current semester
 	@GetMapping("/{token}")
 	public List<Takes> getGradesByStudent(@PathVariable (value = "token") String token) throws Exception {
@@ -43,13 +45,13 @@ public class TakesController{
 		long student = HttpRequest.getUserId(token);
 		List<Takes> grades = new ArrayList<Takes>();
 		for (Takes take: getAllTakes()) {
-			if(take.getStudent_id() == student && take.getSemester().equals(semester) 
+			if(take.getStudent_id() == student && take.getSemester().equals(semester)
 					&& take.getYear() == year)
 				grades.add(take);
 		}
-		return grades;		
+		return grades;
 	}
-	
+
 	// get students who enrolled in the section
 	public List<Long> getStudentsBySection(long id){
 		List<Long> students = new ArrayList<Long>();
@@ -59,8 +61,8 @@ public class TakesController{
 		}
 		return students;
 	}
-	
-	
+
+
 	//create takes for section registration
 	@RequestMapping(path = "/{token}", method=RequestMethod.POST,consumes="application/json",produces="application/json")
 	@ResponseBody
@@ -82,13 +84,13 @@ public class TakesController{
 		}
 		return retVal;
 	}
-	
-	
+
+
 	//update a grade  student id + course id
 	//@PutMapping("/{id}/{course_id}")
 	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.PUT)
 	public Takes updateTakes(@RequestBody Takes takes,
-			@PathVariable (value = "id") long student, 
+			@PathVariable (value = "id") long student,
 			@PathVariable (value = "course_id") long course) {
 		List<Takes> all = getAllTakes();
 		for (Takes exist: all) {
@@ -99,13 +101,13 @@ public class TakesController{
 		}
 		throw new ResourceNotFoundException("section not found");
 	}
-	
+
 	/***
 
 	//get a grade by student_id and course_id
-	//assume student cannot take the same course 
+	//assume student cannot take the same course
 	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.GET)
-	public String getTakesByCourse(@PathVariable (value = "id") long student, 
+	public String getTakesByCourse(@PathVariable (value = "id") long student,
 			@PathVariable (value = "course_id") long course) {
 		List<Takes> all = getAllTakes();
 		for (Takes take: all) {
@@ -114,7 +116,7 @@ public class TakesController{
 		}
 		throw new ResourceNotFoundException("grade not found");
 	}
-	
+
 	// delete all grades of a student
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Section> deleteAll(@PathVariable (value = "id") long id){
@@ -125,10 +127,10 @@ public class TakesController{
 		}
 		return ResponseEntity.ok().build();
 	}
-	
+
 	// delete one grade of a student
 	@RequestMapping(path = "/{id}/{course_id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Section> deleteOne(@PathVariable (value = "id") long student, 
+	public ResponseEntity<Section> deleteOne(@PathVariable (value = "id") long student,
 			@PathVariable (value = "course_id") long course){
 		List<Takes> all = getAllTakes();
 		for (Takes take: all) {

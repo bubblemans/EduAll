@@ -10,8 +10,10 @@ import com.example.springBoot.entity.User;
 @Repository // Annotating so that Spring would scan the interface below as spring bean during component scanning
 public interface UserRepository extends JpaRepository<User, Long> {
 // This repository will provide CRUD data operations for the User entity
-	
+
     @Query("SELECT u FROM User u WHERE u.Token LIKE :Token")
     User searchByToken(@Param("Token") String Token);
-	
+
+    @Query("SELECT u FROM User u WHERE u.email LIKE :email AND u.Password LIKE :Password")
+    User searchByEmailAndPWD(@Param("email") String email, @Param("Password") String Password);
 }

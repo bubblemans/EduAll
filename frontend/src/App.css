@@ -1,3 +1,15 @@
+.file-upload {
+
+}
+.cardButton {
+    color: #008CBA;
+}
+.file-card {
+    border: 1px solid black;
+    padding: 2em 2em 2em 2em ;
+    background-color: white;
+}
+
 .App{
     height: 100vh;
     display:flex ;
@@ -5,7 +17,7 @@
     justify-content: center;
     /* background-color: #c1c2cab2; */
   }
-  
+
 .dashboard{
     height: 100vh;
     display: flex;
@@ -35,7 +47,7 @@
     font-size: 35px;
     font-weight: bold;
     align-self: center;
-} 
+}
 .container{
     display: flex;
     flex-direction: row;
@@ -81,3 +93,9 @@
     margin-top: 0.7em;
 }
 
+.signin-input {
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
