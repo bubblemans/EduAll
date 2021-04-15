@@ -52,7 +52,7 @@ public class SectionController{
 	}	
 	
 	
-	// get sections by one student in current semester
+	// get sections taken by one student in current semester
 	// might be used for home page later  
 	@GetMapping("/{token}")
 	public List<Section> getSectionsByStudent(@PathVariable (value = "token") String token) throws Exception {
@@ -64,15 +64,13 @@ public class SectionController{
 		List<Section> AllSections = getAllSection();
 		List<Takes> allTakes = this.takesRepo.findAll();
 		List<Section> sections = new ArrayList<Section>();
-		long course_id, section_id;
+		long id;
 		for (Takes take: allTakes) {
 			if(take.getStudent_id() == student && take.getSemester().equals(semester) && take.getYear() == year) {
-				course_id = take.getCourse_id();
-				section_id = take.getSection_id();
+				id = take.getId();
 				for (Section section: AllSections) {
 					// student may have taken the section before
-					if(section.getCourse_id() == course_id && section.getSection_id() == section_id
-							&& section.getSemester().equals(semester) && section.getYear() == year) {
+					if(id == section.getId()) {
 						sections.add(section);
 						break;
 					}		
