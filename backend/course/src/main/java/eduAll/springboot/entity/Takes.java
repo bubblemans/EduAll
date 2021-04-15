@@ -19,6 +19,8 @@ public class Takes {
 	
 	private long course_id;
 	
+	private String course_name;
+	
 	private String semester;
 
 	private int year;
@@ -29,12 +31,14 @@ public class Takes {
 		
 	}
 
-	public Takes(long id, long student_id, long section_id, long course_id, String semester, int year, String grade) {
+	public Takes(long id, long student_id, long section_id, long course_id, String course_name, String semester,
+			int year, String grade) {
 		super();
 		this.id = id;
 		this.student_id = student_id;
 		this.section_id = section_id;
 		this.course_id = course_id;
+		this.course_name = course_name;
 		this.semester = semester;
 		this.year = year;
 		this.grade = grade;
@@ -72,6 +76,14 @@ public class Takes {
 		this.course_id = course_id;
 	}
 
+	public String getCourse_name() {
+		return course_name;
+	}
+
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
+	}
+
 	public String getSemester() {
 		return semester;
 	}
@@ -95,5 +107,6 @@ public class Takes {
 	public void setGrade(String grade) {
 		this.grade = grade;
 	}
+
 	
 }

@@ -23,6 +23,8 @@ public class Section{
 
 	private int year;
 	
+	private String course_name;
+	
 	@Column(name = "timeslot")
 	private String timeslot;
 	
@@ -32,17 +34,19 @@ public class Section{
 	public Section() {
 		
 	}
-
-	public Section(long section_id, long course_id, String semester, int year, String timeslot, int capacity) {
+	
+	public Section(long section_id, long course_id, String semester, int year, String course_name, String timeslot,
+			int capacity) {
 		super();
 		this.section_id = section_id;
 		this.course_id = course_id;
 		this.semester = semester;
 		this.year = year;
+		this.course_name = course_name;
 		this.timeslot = timeslot;
 		this.capacity = capacity;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -77,6 +81,14 @@ public class Section{
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public String getCourse_name() {
+		return course_name;
+	}
+
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
 	}
 
 	public String getTimeslot() {

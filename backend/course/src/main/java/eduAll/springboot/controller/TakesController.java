@@ -76,8 +76,8 @@ public class TakesController{
 			for(Section section: this.sectionRepo.findAll()){
 				if(section.getId() == id) {
 					this.repo.save(
-							new Takes(id, userId, section.getSection_id(), section.getCourse_id(),
-									section.getSemester(), section.getYear(), null));
+							new Takes(id, userId, section.getSection_id(), section.getCourse_id(), 
+									section.getCourse_name(), section.getSemester(), section.getYear(), null));
 					break;
 				}
 			}
