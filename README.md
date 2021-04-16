@@ -5,3 +5,21 @@
 2. [File service](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/tree/main/backend/file)
 3. [Chat API service](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/tree/main/backend/chat-api)
 4. [Course service](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/tree/main/backend/course)
+
+## Set up development enviroment using Docker
+
+### On your machine
+```bash
+docker pull bubblemans/eduall:latest
+docker run -p 3000:3000 -v "$(pwd)":/root/2021-spring-cs160-team-EduAll -it bubblemans/eduall /bin/bash
+```
+
+### Inside Docker Container
+```bash
+cd ~/2021-spring-cs160-team-EduAll
+sh install.sh
+sh deploy.sh
+```
+
+### On your machine
+Go to localhost:3000 on your browser
