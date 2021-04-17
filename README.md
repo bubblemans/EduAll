@@ -29,6 +29,16 @@ cd ~/2021-spring-cs160-team-EduAll
 sh install.sh
 sh deploy.sh
 ```
+Since the repo on your machine is mounted on the repo in the docker container, when you install and deploy the system, there will be changes inside the repo. Hence, you need to manage those changes using git if those changes stop your from development.
 
 ### On your machine
 Go to localhost:3000 on your browser
+
+### Re-build your changes
+If you want to re-build non-nodejs service, you will need to re-compile and re-run that service after terminating the running process **inside the container**.
+```bash
+ps aux # find the PID of your process
+kill [PID]
+/usr/bin/python3 /usr/local/bin/flask run --host=0.0.0.0 # example of re-building file service
+```
+For other services, please read "Set up" in previous section.
