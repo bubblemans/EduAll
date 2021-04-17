@@ -12,8 +12,13 @@
 ```bash
 docker pull bubblemans/eduall:latest
 cd /path/to/2021-spring-cs160-team-EduAll
-docker run -d -p 3000:3000 -v "$(pwd)":/root/2021-spring-cs160-team-EduAll -it bubblemans/eduall /bin/bash
 
+# create a docker container in background
+docker run -d -p 3000:3000 -v "$(pwd)":/root/2021-spring-cs160-team-EduAll -it bubblemans/eduall /bin/bash
+```
+
+### Once you have the docker process running in background
+```bash
 docker ps # we need the docker container id
 docker exec -it [CONTAINER ID] /bin/bash
 ```
