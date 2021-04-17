@@ -12,7 +12,10 @@
 ```bash
 docker pull bubblemans/eduall:latest
 cd /path/to/2021-spring-cs160-team-EduAll
-docker run -p 3000:3000 -v "$(pwd)":/root/2021-spring-cs160-team-EduAll -it bubblemans/eduall /bin/bash
+docker run -d -p 3000:3000 -v "$(pwd)":/root/2021-spring-cs160-team-EduAll -it bubblemans/eduall /bin/bash
+
+docker ps # we need the docker container id
+docker exec -it [CONTAINER ID] /bin/bash
 ```
 
 ### Inside Docker Container
