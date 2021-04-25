@@ -1,0 +1,142 @@
+{
+	"id": "6f7dd193-2e93-219a-80b8-978efc022746",
+	"name": "chat",
+	"description": "",
+	"order": [
+		"88e47182-73f8-faa7-92dd-1f8157a79247",
+		"9e7d3cce-912b-9426-8104-d11377196d4a",
+		"ebcf8bae-bf5e-90ed-d91b-6bde777b90b1",
+		"3fed3ae2-d399-815b-707c-8663e80ace68"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1619338687137,
+	"owner": "9397534",
+	"public": false,
+	"requests": [
+		{
+			"id": "3fed3ae2-d399-815b-707c-8663e80ace68",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:4000/contacts/cfcd208495d565ef66e7dff9f98764da",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "6f7dd193-2e93-219a-80b8-978efc022746",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:4000/contacts/cfcd208495d565ef66e7dff9f98764da",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1619338929400,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"additionals\": [\n\t\t1, 2, 3\n\t\t]\n}"
+		},
+		{
+			"id": "88e47182-73f8-faa7-92dd-1f8157a79247",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:4000/contact/cfcd208495d565ef66e7dff9f98764da",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "6f7dd193-2e93-219a-80b8-978efc022746",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:4000/contact/cfcd208495d565ef66e7dff9f98764da",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1619338688133,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"user_id\": \"1\",\n\t\"contacts\": [\"4\"]\n}"
+		},
+		{
+			"id": "9e7d3cce-912b-9426-8104-d11377196d4a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:4000/contact/cfcd208495d565ef66e7dff9f98764da",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "6f7dd193-2e93-219a-80b8-978efc022746",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:4000/contact/cfcd208495d565ef66e7dff9f98764da",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1619338711549,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"user_id\": \"1\",\n\t\"contacts\": [\"4\"]\n}"
+		},
+		{
+			"id": "ebcf8bae-bf5e-90ed-d91b-6bde777b90b1",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://localhost:4000/recentMessages/cfcd208495d565ef66e7dff9f98764da",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "6f7dd193-2e93-219a-80b8-978efc022746",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:4000/recentMessages/cfcd208495d565ef66e7dff9f98764da",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1619338820320,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"user_id\": \"1\",\n\t\"contacts\": [\"4\"]\n}"
+		}
+	]
+}
