@@ -27,10 +27,19 @@ class ChatInput extends Component {
 
   render() {
     return (
-      <form action='.' onSubmit={this.handleSubmit}>
-        <input type='text' placeholder={'Enter...'} value={this.state.message} onChange={this.handleChange}/>
-        <input type='submit' value={'Send'}/>
-      </form>
+      <div style={{padding: "10px"}}>
+        <form action='.' onSubmit={this.handleSubmit}>
+          <div className = 'form-inner'>
+            <input
+              type='text'
+              placeholder={'Enter...'}
+              value={this.state.message}
+              onChange={this.handleChange}
+              style={{width: 500}}/>
+            <input type='submit' value={'Send'}/>
+          </div>
+        </form>
+      </div>
     );
   }
 }
