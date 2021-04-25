@@ -19,10 +19,10 @@ app.use(function (err, req, res, next) {
 
 app.get('/contact/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  getContact(user_id).then(contact => {
-    res.json(contact);
+  getUserId(token).then(userId => {
+    getContact(userId).then(contact => {
+      res.json(contact);
+    });
   });
 })
 
@@ -120,11 +120,11 @@ app.put('/room/:token', (req, res) => {
 
 app.get('/recentMessages/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  getRecentMessages(user_id, data => {
-    res.json(data);
-  })
+  getUserId(token).then(userId => {
+    getRecentMessages(userId, data => {
+      res.json(data);
+    })
+  });
 })
 
 app.listen(port, () => {

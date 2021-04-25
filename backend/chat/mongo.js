@@ -6,6 +6,7 @@ const url = 'mongodb://localhost:27017/chat';
 const messageSchema = new mongoose.Schema({
   message_id: String,
   sender: String,
+  name: String,
   room_id: String,
   message: String,
   data: Buffer,
