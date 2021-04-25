@@ -22,21 +22,9 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title:'Messages',
-        path:'/messages',
+        title:'Message',
+        path:'/message',
         icon: <SiGooglemessages />,
-        cName: 'nav-text'
-    },
-    {
-        title:'My Grades',
-        path:'/grades',
-        icon: <GoGraph />,
-        cName: 'nav-text'
-    },
-    {
-        title:'Calender',
-        path:'/calender',
-        icon: <SiGooglecalendar />,
         cName: 'nav-text'
     },
     {
@@ -47,7 +35,7 @@ export const SidebarData = [
     },
     {
         title:'Logout',
-        path:'/logout',
+        path:'/',
         icon: < RiLogoutCircleFill/>,
         cName: 'nav-text'
     }

@@ -9,6 +9,7 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import FileUpload from './Pages/FileUpload';
 import StudentRegisterPage from './Pages/StudentRegisterPage';
 import ProfessorRegisterPage from './Pages/ProfessorRegisterPage';
+import Chat from './Pages/Chat';
 
 import './App.css'
 
@@ -19,14 +20,15 @@ export default function App() {
     <div className="App">
       <Router>
         {showSidebar? <Sidebar />: null}
-        <Switch>        
+        <Switch>
             <ContextStore.Provider value={{ CurrentUser: [user,setUser], SideBar: [showSidebar, setShowSidebar]}}>
-                <Route path="/" exact component={LoginForm}/>
-                <Route path="/signup" exact component={SignupForm}/>
+                <Route path="/" component={LoginForm} exact/>
+                <Route path="/signup" component={SignupForm}/>
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/file" component={FileUpload}/>
                 <Route path="/register/student" component={StudentRegisterPage}/>
                 <Route path="/register/professor" component={ProfessorRegisterPage}/>
+                <Route path="/message" component={Chat}/>
             </ContextStore.Provider>
         </Switch>
       </Router>
