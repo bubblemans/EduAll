@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fetch = require('node-fetch');
 
 mongoose.connect('mongodb://localhost:27017/chat', {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
@@ -11,7 +12,24 @@ var Contact = mongoose.model('contactModel', contactSchema, 'contact');
 
 async function getContact(id) {
   const doc = await Contact.find({'user_id': id});
-  return doc[0].contacts;
+  const names = await doc[0].contacts.map( async (userId) => {
+    const name = await getName(userId);
+    return name;
+  })
+  return Promise.all(names);
+}
+
+async function getName(userId) {
+  return new Promise( resolve => {
+    const url = 'http://localhost:8080/api/users/' + userId;
+    fetch(url)
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        resolve(data.firstName + " " + data.lastName);
+      })
+  })
 }
 
 async function createContact(id, contacts) {
