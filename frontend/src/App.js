@@ -9,7 +9,7 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import FileUpload from './Pages/FileUpload';
 import StudentRegisterPage from './Pages/StudentRegisterPage';
 import ProfessorRegisterPage from './Pages/ProfessorRegisterPage';
-
+import VideoCallPage from './Pages/VideoCallPage'
 import './App.css'
 
 export default function App() {
@@ -25,6 +25,7 @@ export default function App() {
                 <Route path="/signup" exact component={SignupForm}/>
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/file" component={FileUpload}/>
+                <Route path="/video" component={VideoCallPage}/>
                 <Route path="/register/student" component={StudentRegisterPage}/>
                 <Route path="/register/professor" component={ProfessorRegisterPage}/>
             </ContextStore.Provider>
