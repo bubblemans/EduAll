@@ -7,6 +7,7 @@ import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 import { ContextStore } from './ContextStore';
 import Sidebar from './Components/Sidebar/Sidebar'
 import FileUpload from './Pages/FileUpload';
+import Userpage from './Pages/Userpage';
 import './App.css'
 
 export default function App() {
@@ -22,6 +23,8 @@ export default function App() {
                 <Route path="/register" component={RegisterPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/file" component={FileUpload}/>
+                <Route path="/user" component={Userpage}/>
+
             </ContextStore.Provider>
         </Switch>
       </Router>
