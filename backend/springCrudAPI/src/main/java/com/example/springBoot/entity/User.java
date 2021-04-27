@@ -1,14 +1,15 @@
 package com.example.springBoot.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Entity //JPA
 @Table(name = "users")
@@ -17,16 +18,20 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 	@Id   // Primary key
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long ID;
-	
+
+	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "first_name")
 	private String firstName;
-	
+
+	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "last_name")
 	private String lastName;
-	
+
+	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "email")
 	private String email;
-	
+
+	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "Password")
 	private String Password;
 	
@@ -35,7 +40,6 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		
 	@Column(name = "Token")
 	private String Token;
-	
 
 	public User() {
 		
@@ -120,3 +124,4 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		return token;
 	}
 }
+

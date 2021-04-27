@@ -1,5 +1,6 @@
 package com.example.springBoot.controller;
 
+import com.example.springBoot.exception.DuplicateResourceFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +19,13 @@ import com.example.springBoot.repository.UserRepository;
 import com.example.springBoot.entity.User;
 import com.example.springBoot.exception.ResourceNotFoundException;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController  //annotation for creating rest API
+@CrossOrigin(origins = "*")
+@RestController
 @RequestMapping("/api/users") //The path for all the rest APIs
 public class UserController {
 
@@ -32,18 +35,15 @@ public class UserController {
 
 	//Get all users
 	@GetMapping
-	@CrossOrigin(origins = "*")
 	public List<User> getAllUsers(){
 		return this.userRepository.findAll();
 	}
 
 	//Get the user by ID
 	@GetMapping("/{id}")
-	@CrossOrigin(origins = "*")
 	public User getUserByID(@PathVariable(value = "id") long userId) {
 
 		if(this.userRepository.existsById(userId)) {
-			//The path variable gets it from database
 			return this.userRepository.findById(userId).
 				orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
 		}
@@ -53,24 +53,37 @@ public class UserController {
 	}
 
 	@GetMapping("/{email}/{Password}")
-	@CrossOrigin(origins = "*")
-	public User getUserByEmailPassword(@PathVariable(value = "email") String email, @PathVariable(value = "Password") String Password) {
-		return this.userRepository.searchByEmailAndPWD(email, Password);
+	public User getUserByEmailPassword(@Valid @PathVariable(value = "email") String email, @PathVariable(value = "Password") String Password) {
+		User u = this.userRepository.searchByEmailAndPWD(email, Password);
+		if(this.userRepository.existsById(u.getID())){
+			return u;
+		}
+		else{
+			throw new ResourceNotFoundException("User not found");
+		}
 	}
 
 	//Create user
 	@PostMapping
-	@CrossOrigin(origins = "*")
-	public User createUser(@RequestBody User user) {
-		String tk = user.generateToken(user.getID());
-		user.setToken(tk);
-		return this.userRepository.save(user);
-
+	public User createUser(@Valid @RequestBody User user) {
+		try{
+			User user2 = userRepository.findByEmail(user.getEmail());
+			if(user2 == null) {
+				String tk = user.generateToken(user.getID());
+				user.setToken(tk);
+				return this.userRepository.save(user);
+			}
+			else {
+				throw new DuplicateResourceFoundException("User already exists, try logging in.");
+			}
+		}
+		catch (Exception e){
+			throw new DuplicateResourceFoundException("Email already exists.");
+		}
 	}
 
 	//Update user
 	@PutMapping("/{id}")
-	@CrossOrigin(origins = "*")
 	public User updateUser(@RequestBody User user, @PathVariable("id") long userId) {
 
 		if(this.userRepository.existsById(userId)) {
@@ -92,7 +105,6 @@ public class UserController {
 
 	//Delete user by ID
 	@DeleteMapping("/{id}/")
-	@CrossOrigin(origins = "*")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") long userId){
 
 		if(this.userRepository.existsById(userId)) {
@@ -108,7 +120,6 @@ public class UserController {
 
 	//Get userId by Token
 	@GetMapping("/{id}/token")
-	@CrossOrigin(origins = "*")
 	@ResponseBody
 	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
 		String userId = "", jsId = "";
@@ -125,3 +136,4 @@ public class UserController {
 		return js;
 	}
 }
+

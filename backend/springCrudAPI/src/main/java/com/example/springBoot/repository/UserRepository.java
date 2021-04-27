@@ -14,6 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.Token LIKE :Token")
     User searchByToken(@Param("Token") String Token);
 
+    @Query("SELECT u FROM User u where u.email = ?1")
+    User findByEmail(@Param("email") String email);
+
     @Query("SELECT u FROM User u WHERE u.email LIKE :email AND u.Password LIKE :Password")
     User searchByEmailAndPWD(@Param("email") String email, @Param("Password") String Password);
+
 }
