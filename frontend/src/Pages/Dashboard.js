@@ -42,25 +42,47 @@ export default function Dashboard () {
             time: "7:30 AM - 8:45 AM",
             grade: "A (90.37)"
         },
+        {
+            code: "CS 157C",
+            name: "NoSQL",
+            days: "M/W",
+            time: "7:30 AM - 8:45 AM",
+            grade: "A (90.37)"
+        },
+        {
+            code: "CS 157C",
+            name: "NoSQL",
+            days: "M/W",
+            time: "7:30 AM - 8:45 AM",
+            grade: "A (90.37)"
+        },
+        {
+            code: "CS 157C",
+            name: "NoSQL",
+            days: "M/W",
+            time: "7:30 AM - 8:45 AM",
+            grade: "A (90.37)"
+        }
     ]
     useEffect(() => {
         setShowSidebar(true)
     },[])
-
+    const colors = ["#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4"]
     return(
         <div className="dashboard">
             <div className="welcome">
                 DashBoard
-                <span>Welcome Back!</span>
             </div>
             <div className="heading">Classes</div>
             <div className="container"> 
-                {classData.map((item)=> {
+                {classData.map((item,i)=> {
+                    console.log(i)
                     return(
-                        <ClassCard code={item.code} name={item.name} days={item.days} time={item.time} grade={item.grade}/>
+                        <ClassCard code={item.code} name={item.name} days={item.days} time={item.time} grade={item.grade} color={colors[i]}/>
                     )
                 })}
             </div>
+            {/* <Popup /> */}
         </div>
     )
 }
