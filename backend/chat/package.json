@@ -10,13 +10,9 @@
   "name": "chat",
   "version": "1.0.0",
   "main": "server.js",
-<<<<<<< Updated upstream
-  "devDependencies": {},
-=======
   "devDependencies": {
     "nodemon": "^2.0.7"
   },
->>>>>>> Stashed changes
   "author": "",
   "license": "ISC",
   "description": ""

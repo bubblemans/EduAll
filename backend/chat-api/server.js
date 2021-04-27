@@ -7,7 +7,7 @@ const { getRecentMessages } = require('./redis');
 const { getUserId } = require('./utils');
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -60,6 +60,8 @@ app.put('/contacts/:token', (req, res) => {
   const token = req.params.token;
   getUserId(token).then(userId => {
     const contacts = req.body.contacts;
+    console.log(req);
+    console.log(req.body);
     const additionals = req.body.additionals;
     addContacts(contacts, additionals).then(
       res.sendStatus(200)
@@ -126,5 +128,5 @@ app.get('/recentMessages/:token', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log('run on localhost:3000')
+  console.log('run on localhost:4000')
 })

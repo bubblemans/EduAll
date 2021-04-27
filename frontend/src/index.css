@@ -55,7 +55,8 @@ form .form-inner .form-group{
 .form-inner .form-group label {
   display: block;
   color: #666;
-  font-size: 12px;
+  font-size: 15px;
+  font-weight: 500;
   margin-bottom: 5px;
   transition: 0.4s;
 }
