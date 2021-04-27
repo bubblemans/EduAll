@@ -9,8 +9,7 @@ import Sidebar from './Components/Sidebar/Sidebar'
 import FileUpload from './Pages/FileUpload';
 import StudentRegisterPage from './Pages/StudentRegisterPage';
 import ProfessorRegisterPage from './Pages/ProfessorRegisterPage';
-import VideoCallPage from './Pages/VideoCallPage';
-
+import VideoCallPage from './Pages/VideoCallPage'
 import './App.css'
 
 export default function App() {

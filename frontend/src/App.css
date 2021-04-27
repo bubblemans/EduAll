@@ -88,6 +88,8 @@
     margin-right: 1em;
     margin-bottom: 1em;
     padding: 1em 1em 1em 1em;
+    background-color: white;
+    font-family: montserrat,sans-serif;
     align-items: flex-start;
     /* box-shadow: 6px 5px 6px grey; */
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;

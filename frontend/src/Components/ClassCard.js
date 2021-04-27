@@ -7,8 +7,8 @@ export default function ClassCard({ code, name, days, time, grade, color }) {
         <div className="label">Class name</div>
         <div className="class-details">{name}</div>
         <div className="class-details-container">
-            <div style={{color:"white"}}>Days</div> 
-            <div style={{color:"white"}}>Time</div>
+        <div style={{color:"white"}}>Days</div> 
+        <div style={{color:"white"}}>Time</div>
         </div>
         <div className="class-details-container">
             <div>{days}</div> 
