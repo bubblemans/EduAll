@@ -15,6 +15,7 @@
     display:flex ;
     align-items: center;
     justify-content: center;
+    font-family: Brandon Text,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
     /* background-color: #c1c2cab2; */
   }
 
@@ -25,13 +26,18 @@
     margin-left: 250px;
     flex-direction: column;
     flex-wrap: wrap;
-    background-color: #c1c2cab2;
+    background-color: #FAF9F6;
 }
 .welcome {
-    margin-top: 2em;
-    margin-left: 1em;
-    font-size: 30px;
-    font-weight: bold;
+    font-family: Brandon Text,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+    color: #1f1d2d;
+    margin-top: 0.5em;
+    padding-left: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 40px;
+    font-weight:bolder;
+    border-bottom: 2.4px dashed lightgrey;
 }
 
 .welcome span{
@@ -44,38 +50,60 @@
 }
 
 .heading {
+    font-family: Brandon Text,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;
+    color: #1f1d2d;
+    display: block;
     font-size: 35px;
-    font-weight: bold;
+    font-weight: 700;
     align-self: center;
 }
 .container{
+    border-top: 2.4px dashed lightgrey;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 30px;
     margin-top: 1em;
+    margin-left: 3.5em;
 }
+
+.popup {
+    border: 2px black solid;
+    height: 100px;
+    width: 300px;
+    margin-top:20%;
+    margin-left:35%;
+    z-index: 10;
+    position: absolute;
+    background-color: #41548a;
+}
+
 .class-card{
     display: flex;
     flex-direction: column;
     /* border: 2px solid black; */
     width:20em;
-    height:13em;
+    height:17em;
     font-size:  1em;
-    background-color: white;
     margin-right: 1em;
     margin-bottom: 1em;
-    font-family: montserrat,sans-serif;
     padding: 1em 1em 1em 1em;
     align-items: flex-start;
+    /* box-shadow: 6px 5px 6px grey; */
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
 .class-code {
     font-weight: bold;
 }
+.class-code:hover {
+    font-size: large;
+    color: blue;
+}
 .label{
     margin-top: 1em;
-    color: grey;
+    color: white;
+    font-weight: 500;
 }
 .class-details {
     margin-top: 0.5em;
@@ -99,3 +127,11 @@
     margin-bottom: 10px;
     margin-left: 10px;
 }
+
+.i-frame {
+    margin-left:20px;
+    width: 100%;
+    height: 100vh;
+    /* background-color: blue; */
+}
+
