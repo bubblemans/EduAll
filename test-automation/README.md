@@ -11,4 +11,4 @@ sh test-file.sh
 We use Postman to test our chat service where there are 4 different requests for our basic REST APIs. You can find the test results [here](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/blob/main/test-automation/chat.postman_collection.json).
 
 ## User Service
-We used Postman for this service with 6 different requests. The test result can be found [here](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/blob/main/test-automation/userService.postman_collection.json).
+We used Postman for this service with 6 different requests. The test result can be found [here](https://github.com/bubblemans/2021-spring-cs160-team-EduAll/blob/userService2.0/test-automation/userService.postman_collection.json).
