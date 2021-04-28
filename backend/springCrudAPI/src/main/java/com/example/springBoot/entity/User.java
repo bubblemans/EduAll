@@ -34,6 +34,10 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "Password")
 	private String Password;
+
+	@Size(min = 0, max = 250)
+	@Column(name = "Bio")
+	private String Bio;
 	
 	@Column(name = "Role")
 	private String Role;
@@ -45,13 +49,14 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		
 	}
 		
-	public User(String firstName, String lastName, String email, String Password, String Role, String Token){
+	public User(String firstName, String lastName, String email, String Password, String Role, String Bio){
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.Password = Password;
 		this.Role = Role;
+		this.Bio = Bio;
 		this.Token = generateToken(this.ID);
 		
 	}
@@ -97,6 +102,12 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 	}
 	public void setToken(String token) {
 		this.Token = token;
+	}
+	public String getBio() {
+		return Bio;
+	}
+	public void setBio(String Bio) {
+		this.Bio = Bio;
 	}
 	
 	public String generateToken(long id) {

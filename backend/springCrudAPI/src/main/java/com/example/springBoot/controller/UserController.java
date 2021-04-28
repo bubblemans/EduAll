@@ -94,6 +94,7 @@ public class UserController {
 			existingUserObj.setLastName(user.getLastName());
 			existingUserObj.setEmail(user.getEmail());
 			existingUserObj.setPwd(user.getPwd());
+			existingUserObj.setBio(user.getBio());
 
 			return this.userRepository.save(existingUserObj);
 
