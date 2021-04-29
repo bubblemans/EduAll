@@ -10,6 +10,7 @@ import FileUpload from './Pages/FileUpload';
 import StudentRegisterPage from './Pages/StudentRegisterPage';
 import ProfessorRegisterPage from './Pages/ProfessorRegisterPage';
 import VideoCallPage from './Pages/VideoCallPage'
+import Userpage from './Pages/Userpage';
 import './App.css'
 
 export default function App() {
@@ -28,6 +29,8 @@ export default function App() {
                 <Route path="/video" component={VideoCallPage}/>
                 <Route path="/register/student" component={StudentRegisterPage}/>
                 <Route path="/register/professor" component={ProfessorRegisterPage}/>
+                <Route path="/user" component={Userpage}/>
+
             </ContextStore.Provider>
         </Switch>
       </Router>
