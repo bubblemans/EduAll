@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "703cfd20-3a4a-4fe2-80e0-ad3d8d3adcbc",
+		"name": "courseService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8081/eduall/section",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/eduall/section",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"eduall",
+						"section"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/eduall/grade/0d21!@",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/eduall/grade/0d21!@",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"eduall",
+						"grade",
+						"0d21!@"
+					]
+				},
+				"description": "get all grades of one student in currenct semester "
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/eduall/instructor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/eduall/instructor/cbekc/7/Computer Science",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"eduall",
+						"instructor",
+						"cbekc",
+						"7",
+						"Computer Science"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/eduall/student",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/eduall/student/iisqw/4/Art",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"eduall",
+						"student",
+						"iisqw",
+						"4",
+						"Art"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/eduall/grade/0d21!@",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[5,14]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/eduall/grade/0d21!@",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"eduall",
+						"grade",
+						"0d21!@"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
