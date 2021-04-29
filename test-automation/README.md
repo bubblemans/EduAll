@@ -15,7 +15,7 @@ We used Postman for this service with 6 different requests. The test result can 
 
 ## Course Service 
 We use Postman to test our chat service where there are 4 different requests for our basic REST APIs. You can find the test results [here]
-https://github.com/bubblemans/2021-spring-cs160-team-EduAll/blob/main/test-automation/courseService.postman_collection.json
+(https://github.com/bubblemans/2021-spring-cs160-team-EduAll/blob/main/test-automation/courseService.postman_collection.json).
 
 ## Frontend
 We use Selenium to test frontend. Before running the java file on the current test-automation folder, please download 
