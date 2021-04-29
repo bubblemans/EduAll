@@ -8,7 +8,11 @@ import ChatMessage from './ChatMessage';
 import ChatListItem from './ChatListItem';
 import { ContextStore } from '../ContextStore';
 
-const URL = 'ws://localhost:3030';
+const URL = "http://localhost:3030";
+
+
+const io = require('socket.io-client');
+let socket;
 
 export default function Chat() {
   const { CurrentUser, SideBar } = useContext(ContextStore);
@@ -16,13 +20,13 @@ export default function Chat() {
   const [ user, setUser ] = CurrentUser;
   const [sender, setSender] = useState("user_id_1");
   const [name, setName] = useState(user.firstName + " " + user.lastName);
-  const [room_id, setRoomId] = useState("room_id_1");
   const [messages, setMessages] = useState([]);
   const [searchBarOptions, setSearchBarOptions] = useState({});
   const [recentMessages, setRecentMessages] = useState({});
   const [numRoom, setNumRoom] = useState(0);
   const [searchValue, setSearchValue] = useState("");
 
+  const room = useRef("");
   const messagesEndRef = useRef(null);
   const ws = useRef(null);
 
@@ -32,41 +36,37 @@ export default function Chat() {
 
   useEffect(() => {
     setShowSidebar(true);
+    setSearchBarOptions(['1', '2']);
 
-    scrollToBottom();
+    // scrollToBottom();
 
-    var url = "http://localhost:4000/contact/" + user.token;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => setSearchBarOptions(data))
+    // var url = "http://localhost:4000/contact/" + user.token;
+    // fetch(url)
+    //   .then(res => res.json())
+    //   .then(data => setSearchBarOptions(data))
 
-    url = "http://localhost:4000/recentMessages/" + user.token;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setRecentMessages(data);
-        setNumRoom(data.number_of_rooms);
-      })
+    // url = "http://localhost:4000/recentMessages/" + user.token;
+    // fetch(url)
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     setRecentMessages(data);
+    //     setNumRoom(data.number_of_rooms);
+    //   })
 
   }, [messages])
 
-  const handleWS = () => {
-    // TODO: initialize ws based on chosen room_id!
-    ws.current = new WebSocket(URL);
 
-    ws.current.onopen = event => {
-      console.log('connected');
+  const handleSocket = (room) => {
+    console.log(room);
+    if (socket) {
+      socket.disconnect();
     }
-
-    ws.current.onmessage = event => {
-      const messages = JSON.parse(event.data);
-      addMessages(messages);
-    }
-
-    ws.current.onclose = () => {
-      console.log('disconnected');
-      ws = new WebSocket(URL);
-    }
+    socket = io.connect(URL);
+    socket.emit("join", room);
+    socket.on("chat", data => {
+      // store all messages to
+      addMessages(data);
+    })
   }
 
   const addMessages = ms => {
@@ -75,21 +75,30 @@ export default function Chat() {
 
   const handleSubmitMessage = message => {
     const messages = [{
-      room_id: room_id,
+      room: room.current,
       sender: sender,
       message: message,
       name: name
     }];
-    ws.current.send(JSON.stringify(messages));
+    socket.emit("chat", messages[0]);
     addMessages(messages);
   }
 
   const handleSearchBar = name => {
-    console.log(name);
+    room.current = getRoomId(name); // TODO
+    handleSocket(room.current);
   }
 
-  const handleClickListItem = (room) => {
-    console.log(room);
+  const getRoomId = name => {
+// TODO: call API
+// call GET: check if there is a room for two people
+// if not: call POST to create one
+  }
+
+  const handleClickListItem = (room_id) => {
+    console.log(room_id);
+    room.current = room_id;
+    handleSocket(room.current);
   }
 
   return (
@@ -107,7 +116,7 @@ export default function Chat() {
             inputValue={searchValue}
             onInputChange={(event, newInputValue) => {
               setSearchValue(newInputValue);
-              handleSearchBar(newInputValue);
+              // handleSearchBar(newInputValue);
             }}
             options={ searchBarOptions }
             renderInput={(params) => <TextField {...params} label="Search" variant="outlined" />}
