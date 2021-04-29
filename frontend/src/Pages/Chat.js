@@ -21,12 +21,14 @@ export default function Chat() {
   const [sender, setSender] = useState("user_id_1");
   const [name, setName] = useState(user.firstName + " " + user.lastName);
   const [messages, setMessages] = useState([]);
-  const [searchBarOptions, setSearchBarOptions] = useState({});
+  // const messages = useRef([]);
+  const [searchBarOptions, setSearchBarOptions] = useState([]);
   const [recentMessages, setRecentMessages] = useState({});
   const [numRoom, setNumRoom] = useState(0);
   const [searchValue, setSearchValue] = useState("");
 
   const room = useRef("");
+  const [roomId, setRoomId] = useState("");
   const messagesEndRef = useRef(null);
   const ws = useRef(null);
 
@@ -35,15 +37,24 @@ export default function Chat() {
   }
 
   useEffect(() => {
+    console.log(messages);
+
+    let isCancelled = false;
     setShowSidebar(true);
-    setSearchBarOptions(['1', '2']);
+    // setSearchBarOptions(['1', '4']);
 
     // scrollToBottom();
 
-    // var url = "http://localhost:4000/contact/" + user.token;
-    // fetch(url)
-    //   .then(res => res.json())
-    //   .then(data => setSearchBarOptions(data))
+    var url = "http://localhost:4000/contact/" + user.token;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setSearchBarOptions(data)
+      })
+
+    return () => {
+      isCancelled = true;
+    };
 
     // url = "http://localhost:4000/recentMessages/" + user.token;
     // fetch(url)
@@ -56,13 +67,12 @@ export default function Chat() {
   }, [messages])
 
 
-  const handleSocket = (room) => {
-    console.log(room);
+  const handleSocket = (id) => {
     if (socket) {
       socket.disconnect();
     }
     socket = io.connect(URL);
-    socket.emit("join", room);
+    socket.emit("join", id);
     socket.on("chat", data => {
       // store all messages to
       addMessages(data);
@@ -70,35 +80,49 @@ export default function Chat() {
   }
 
   const addMessages = ms => {
-    setMessages([...messages, ...ms]);
+    setMessages(messages => [...messages, ...ms]);
   }
 
   const handleSubmitMessage = message => {
-    const messages = [{
-      room: room.current,
+    socket.emit("chat", {
+      room: roomId,
       sender: sender,
       message: message,
       name: name
-    }];
-    socket.emit("chat", messages[0]);
-    addMessages(messages);
+    });
+    // addMessages(messages);
   }
 
-  const handleSearchBar = name => {
-    room.current = getRoomId(name); // TODO
-    handleSocket(room.current);
+  const handleSearchBar = userName => {
+    let participant;
+    for (const key in searchBarOptions) {
+      const option = searchBarOptions[key];
+      if (option.name === userName) {
+        participant = option.user;
+        getRoomId(participant)
+          .then( roomObject => {
+            const roomName = roomObject.name;
+            room.current = roomName;
+            setRoomId(roomObject._id);
+            handleSocket(roomObject._id);
+          })
+      }
+    }
   }
 
-  const getRoomId = name => {
-// TODO: call API
-// call GET: check if there is a room for two people
-// if not: call POST to create one
+  const getRoomId = participant => {
+    const url = "http://localhost:4000/room/" + user.token + "?participant=" + participant;
+    return fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      return data;
+    })
   }
 
   const handleClickListItem = (room_id) => {
-    console.log(room_id);
-    room.current = room_id;
-    handleSocket(room.current);
+    // console.log(room_id);
+    // room.current = room_id;
+    // handleSocket(room.current);
   }
 
   return (
@@ -118,7 +142,9 @@ export default function Chat() {
               setSearchValue(newInputValue);
               // handleSearchBar(newInputValue);
             }}
-            options={ searchBarOptions }
+            options={ searchBarOptions.map((option, i) => {
+              return option.name;
+            }) }
             renderInput={(params) => <TextField {...params} label="Search" variant="outlined" />}
           />
         </div>
@@ -143,7 +169,7 @@ export default function Chat() {
 
       <Container class="chat-window">
         <Container class="chat-room-title">
-          {searchValue}
+          {room.current}
         </Container>
         <Container class="chat-message">
           <div>

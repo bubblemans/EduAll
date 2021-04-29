@@ -12,14 +12,14 @@ var Contact = mongoose.model('contactModel', contactSchema, 'contact');
 
 async function getContact(id) {
   const doc = await Contact.find({'user_id': id});
-  const names = await doc[0].contacts.map( async (userId) => {
-    const name = await getName(userId);
-    return name;
+  const users = await doc[0].contacts.map( async (userId) => {
+    const user = await getUser(userId);
+    return user;
   })
-  return Promise.all(names);
+  return Promise.all(users);
 }
 
-async function getName(userId) {
+async function getUser(userId) {
   return new Promise( resolve => {
     const url = 'http://localhost:8080/api/users/' + userId;
     fetch(url)
@@ -27,7 +27,11 @@ async function getName(userId) {
         return res.json();
       })
       .then(data => {
-        resolve(data.firstName + " " + data.lastName);
+        const user = {
+          user: userId,
+          name: data.firstName + " " + data.lastName
+        }
+        resolve(user);
       })
   })
 }
@@ -90,13 +94,18 @@ const roomSchema = new mongoose.Schema({
 });
 var Room = mongoose.model('roomModel', roomSchema, 'room');
 
-async function getRooms(user_id) {
+async function getRoomsByUserId(user_id) {
   const docs = await Room.find({'participants': user_id});
   return docs;
 }
 
-async function getRoom(user_id, room_id) {
+async function getRoomByRoomId(user_id, room_id) {
   const doc = await Room.findOne({'participants': user_id, 'room_id': room_id});
+  return doc;
+}
+
+async function getRoomByParticipant(user_id, participant) {
+  const doc = await Room.findOne({'participants': user_id, 'participants': participant});
   return doc;
 }
 
@@ -116,8 +125,9 @@ module.exports = {
   createAllContacts,
   updateContact,
   addContacts,
-  getRooms,
-  getRoom,
+  getRoomsByUserId,
+  getRoomByRoomId,
+  getRoomByParticipant,
   createRoom,
   updateRoom
 }
