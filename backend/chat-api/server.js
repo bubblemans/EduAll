@@ -60,8 +60,6 @@ app.put('/contacts/:token', (req, res) => {
   const token = req.params.token;
   getUserId(token).then(userId => {
     const contacts = req.body.contacts;
-    console.log(req);
-    console.log(req.body);
     const additionals = req.body.additionals;
     addContacts(contacts, additionals).then(
       res.sendStatus(200)
@@ -102,19 +100,20 @@ app.get('/room/:token', (req, res) => {
 
 app.post('/room/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  const data = req.body;
-  if (data.updated_at === undefined) {
-    data.updated_at = new Date().toISOString();
-    createRoom(user_id, data).then(
-      res.sendStatus(201)
-    );
-  } else {
-    createRoom(user_id, data).then(
-      res.sendStatus(201)
-    );
-  }
+  getUserId(token)
+    .then(userId => {
+      const data = req.body;
+      if (data.updated_at === undefined) {
+        data.updated_at = new Date().toISOString();
+        createRoom(userId, data).then(
+          res.sendStatus(201)
+        );
+      } else {
+        createRoom(userId, data).then(
+          res.sendStatus(201)
+        );
+      }
+    });
 })
 
 app.put('/room/:token', (req, res) => {

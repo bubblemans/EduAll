@@ -100,7 +100,7 @@ async function getRoomsByUserId(user_id) {
 }
 
 async function getRoomByRoomId(user_id, room_id) {
-  const doc = await Room.findOne({'participants': user_id, 'room_id': room_id});
+  const doc = await Room.findOne({'participants': user_id, '_id': room_id});
   return doc;
 }
 
