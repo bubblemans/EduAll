@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import '../App.css'
-import EdiText from 'react-editext'
+import { EditText } from 'react-edit-text'
 
 
 function Usercard(){
@@ -10,7 +10,7 @@ function Usercard(){
     const [bio,setBio] = useState('No Bio Yet')
     const [link,setLink] = useState('')
     const [value, setValue] = useState('What is real? How do you define real?')
-    
+
     const handleSave = (val) => {
         console.log('Edited Value -> ', val)
         setValue(val)
@@ -27,20 +27,20 @@ function Usercard(){
                 </div>
             <div className = "info-container">
             <h1>{name}</h1>
-            <h3>Username: 
-            <EdiText type="text" value={userName} onSave={handleSave} />
+            <h3>Username:
+            < EditText  type="text" value={userName} onSave={handleSave} />
             </h3>
-           
+
             <h4>Email :
-                <EdiText type="text" value={email} onSave={handleSave} /></h4>
-            <h5>Biography : 
-            <EdiText type="text" value={bio} onSave={handleSave} />
+                < EditText  type="text" value={email} onSave={handleSave} /></h4>
+            <h5>Biography :
+            < EditText  type="text" value={bio} onSave={handleSave} />
             </h5>
-        
-            <h6>Links : 
-            <EdiText type="text" value={link} onSave={handleSave} />
+
+            <h6>Links :
+            < EditText  type="text" value={link} onSave={handleSave} />
             </h6>
-            
+
             </div>
             <div class="button_cont" align="center"><a class="example_a" href="add-website-here" target="_blank" rel="nofollow noopener">Edit Profile</a></div>
         </div>
