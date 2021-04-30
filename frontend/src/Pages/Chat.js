@@ -21,7 +21,6 @@ export default function Chat() {
   const [sender, setSender] = useState("user_id_1");
   const [name, setName] = useState(user.firstName + " " + user.lastName);
   const [messages, setMessages] = useState([]);
-  // const messages = useRef([]);
   const [searchBarOptions, setSearchBarOptions] = useState([]);
   const [recentMessages, setRecentMessages] = useState({});
   const [numRoom, setNumRoom] = useState(0);
@@ -37,13 +36,10 @@ export default function Chat() {
   }
 
   useEffect(() => {
-    console.log(messages);
-
     let isCancelled = false;
     setShowSidebar(true);
-    // setSearchBarOptions(['1', '4']);
 
-    // scrollToBottom();
+    scrollToBottom();
 
     var url = "http://localhost:4000/contact/" + user.token;
     fetch(url)
@@ -52,17 +48,17 @@ export default function Chat() {
         setSearchBarOptions(data)
       })
 
+    url = "http://localhost:4000/recentMessages/" + user.token;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setRecentMessages(data);
+        setNumRoom(data.number_of_rooms);
+      })
+
     return () => {
       isCancelled = true;
     };
-
-    // url = "http://localhost:4000/recentMessages/" + user.token;
-    // fetch(url)
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     setRecentMessages(data);
-    //     setNumRoom(data.number_of_rooms);
-    //   })
 
   }, [messages])
 
@@ -85,8 +81,8 @@ export default function Chat() {
 
   const handleSubmitMessage = message => {
     socket.emit("chat", {
-      room: roomId,
-      sender: sender,
+      room_id: roomId,
+      sender: user.id,
       message: message,
       name: name
     });
@@ -115,14 +111,54 @@ export default function Chat() {
     return fetch(url)
     .then(res => res.json())
     .then(data => {
-      return data;
+      if (data.hasOwnProperty("_id")) {
+        return data;
+      } else {
+        return createRoom(participant)
+          .then( () => {
+            getRoomId(participant)
+            .then(roomObject => {
+              return roomObject;
+            })
+          })
+      }
     })
   }
 
+  const createRoom = participant => {
+    const url = "http://localhost:4000/room/" + user.token + "?participant=" + participant;
+    const body = {
+      name: "Room",
+      participants: [user.id, participant]
+    }
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(data => {
+        return data;
+      })
+  }
+
   const handleClickListItem = (room_id) => {
-    // console.log(room_id);
-    // room.current = room_id;
-    // handleSocket(room.current);
+    console.log(room_id);
+    getRoomNameById(room_id)
+      .then( (name) => {
+        room.current = name;
+        setRoomId(room_id);
+        handleSocket(room_id)
+      })
+  }
+
+  const getRoomNameById = (id) => {
+    const url = "http://localhost:4000/room/" + user.token + "?id=" + id;
+    return fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        return data.name;
+      })
   }
 
   return (

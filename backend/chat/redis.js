@@ -45,7 +45,7 @@ function addToHash(hkey, data, number_of_rooms) {
           continue;
         }
         const value = data[key];
-        key = key + '_' + number_of_rooms;
+        key = key + '_' + data['sender'];
         client.hset(hkey, key, value, redis.print);
       }
     } else {
@@ -77,8 +77,6 @@ function isRoomExist(hkey, data, number_of_rooms) {
 function compareRoom(newRoom, hkey, key) {
   return new Promise((resolve, reject) => {
     client.hget(hkey, key, (err, oldRoom) => {
-      console.log('new ' + newRoom);
-      console.log('old ' + oldRoom);
       if (newRoom === oldRoom) {
         setTimeout(() => {
           resolve(true);

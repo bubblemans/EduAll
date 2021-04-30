@@ -1,6 +1,6 @@
 // const WebSocket = require('ws');
 
-// const { queryMessages, insertMessage } = require('./mongo');
+const { queryMessages, insertMessage } = require('./mongo');
 
 // const wss = new WebSocket.Server({ port: 3030});
 
@@ -40,15 +40,22 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () =>
      console.log(`Disconnected: ${socket.id}`));
 
-  socket.on('join', (room) => {
-     console.log(`Socket ${socket.id} joining ${room}`);
-     socket.join(room);
+  socket.on('join', (room_id) => {
+     console.log(`Socket ${socket.id} joining ${room_id}`);
+     queryMessages(room_id)
+      .then(messages => {
+        io.to(room_id).emit('chat', messages);
+      })
+     socket.join(room_id);
   });
 
   socket.on('chat', (data) => {
-     const { room, sender, message, name } = data;
-     console.log(`${name} sent ${message} in ${room}`);
-     io.to(room).emit('chat', [data]);
+     const { room_id, sender, message, name } = data;
+     insertMessage(data)
+      .then( () => {
+        console.log(`${name} sent ${message} in ${room_id}`);
+        io.to(room_id).emit('chat', [data]);
+      })
   });
 });
 

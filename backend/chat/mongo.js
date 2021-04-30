@@ -18,8 +18,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 const Message = mongoose.model('messages', messageSchema);
 
-async function queryMessages() {
-  const messages = await Message.find();
+async function queryMessages(room_id) {
+  const messages = await Message.find({room_id: room_id});
   return messages;
 }
 
