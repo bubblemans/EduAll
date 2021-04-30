@@ -28,18 +28,6 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title:'My Grades',
-        path:'/grades',
-        icon: <GoGraph />,
-        cName: 'nav-text'
-    },
-    {
-        title:'Calender',
-        path:'/calender',
-        icon: <SiGooglecalendar />,
-        cName: 'nav-text'
-    },
-    {
         title:'Files',
         path:'/file',
         icon: < AiFillFilePdf/>,
