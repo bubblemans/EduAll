@@ -170,10 +170,7 @@
 .class-code {
     font-weight: bold;
 }
-.class-code:hover {
-    font-size: large;
-    color: blue;
-}
+
 .label{
     margin-top: 1em;
     color: white;
