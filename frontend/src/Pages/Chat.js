@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState , useRef} from 'react'
+import React, { useContext, useEffect, useState , useRef} from "react"
 
-import { List, Container, TextField } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { List, Container, TextField } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
-import ChatInput from './ChatInput';
-import ChatMessage from './ChatMessage';
-import ChatListItem from './ChatListItem';
-import { ContextStore } from '../ContextStore';
+import ChatInput from "./ChatInput";
+import ChatMessage from "./ChatMessage";
+import ChatListItem from "./ChatListItem";
+import { ContextStore } from "../ContextStore";
 
 const URL = "http://localhost:3030";
 
 
-const io = require('socket.io-client');
+const io = require("socket.io-client");
 let socket;
 
 export default function Chat() {
@@ -37,24 +37,14 @@ export default function Chat() {
 
   useEffect(() => {
     let isCancelled = false;
+
     setShowSidebar(true);
 
     scrollToBottom();
 
-    var url = "http://localhost:4000/contact/" + user.token;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setSearchBarOptions(data)
-      })
+    getSearchBarOptions();
 
-    url = "http://localhost:4000/recentMessages/" + user.token;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        setRecentMessages(data);
-        setNumRoom(data.number_of_rooms);
-      })
+    getRecentMessages();
 
     return () => {
       isCancelled = true;
@@ -62,6 +52,24 @@ export default function Chat() {
 
   }, [messages])
 
+  const getSearchBarOptions = () => {
+    var url = "http://localhost:4000/contact/" + user.token;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setSearchBarOptions(data)
+      })
+  }
+
+  const getRecentMessages = () => {
+    const url = "http://localhost:4000/recentMessages/" + user.token;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setRecentMessages(data);
+        setNumRoom(data.number_of_rooms);
+      })
+  }
 
   const handleSocket = (id) => {
     if (socket) {
@@ -70,7 +78,6 @@ export default function Chat() {
     socket = io.connect(URL);
     socket.emit("join", id);
     socket.on("chat", data => {
-      // store all messages to
       addMessages(data);
     })
   }
@@ -84,9 +91,9 @@ export default function Chat() {
       room_id: roomId,
       sender: user.id,
       message: message,
-      name: name
+      name: name,
+      token: user.token
     });
-    // addMessages(messages);
   }
 
   const handleSearchBar = userName => {
@@ -143,7 +150,6 @@ export default function Chat() {
   }
 
   const handleClickListItem = (room_id) => {
-    console.log(room_id);
     getRoomNameById(room_id)
       .then( (name) => {
         room.current = name;
@@ -176,7 +182,6 @@ export default function Chat() {
             inputValue={searchValue}
             onInputChange={(event, newInputValue) => {
               setSearchValue(newInputValue);
-              // handleSearchBar(newInputValue);
             }}
             options={ searchBarOptions.map((option, i) => {
               return option.name;
@@ -192,7 +197,7 @@ export default function Chat() {
                   <ChatListItem
                     sender={recentMessages["name_" + (i+1).toString()]}
                     text={recentMessages["message_" + (i+1).toString()]}
-                    date={recentMessages["created_at_" + (i+1).toString()].split('T')[0]}
+                    date={recentMessages["created_at_" + (i+1).toString()].split("T")[0]}
                     room={recentMessages["room_id_" + (i+1).toString()]}
                     handleClick={handleClickListItem}
                   />
