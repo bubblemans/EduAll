@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const { updateRecentMessage } = require('./redis');
+const { updateAllParticipants, updateRecentMessage } = require("./redis");
 
-const url = 'mongodb://localhost:27017/chat';
+const url = "mongodb://localhost:27017/chat";
 const messageSchema = new mongoose.Schema({
   message_id: String,
   sender: String,
@@ -14,9 +14,9 @@ const messageSchema = new mongoose.Schema({
 });
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on("error", console.error.bind(console, "connection error:"));
 
-const Message = mongoose.model('messages', messageSchema);
+const Message = mongoose.model("messages", messageSchema);
 
 async function queryMessages(room_id) {
   const messages = await Message.find({room_id: room_id});
@@ -27,7 +27,7 @@ async function insertMessage(message) {
   if (message.created_at === undefined) {
     message.created_at = new Date().toISOString();
   }
-  updateRecentMessage(message);
+  await updateAllParticipants(message);
   await Message.create(message);
 }
 
