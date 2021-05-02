@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const { getContact, createContact, createAllContacts, addContacts, updateContact, getRooms, getRoom, createRoom, updateRoom } = require('./mongo');
+const { getContact, createContact, createAllContacts, addContacts, updateContact, getRoomsByUserId, getRoomByRoomId, getRoomByParticipant, createRoom, updateRoom } = require('./mongo');
 const { getRecentMessages } = require('./redis');
 const { getUserId } = require('./utils');
 
@@ -19,10 +19,10 @@ app.use(function (err, req, res, next) {
 
 app.get('/contact/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  getContact(user_id).then(contact => {
-    res.json(contact);
+  getUserId(token).then(userId => {
+    getContact(userId).then(contact => {
+      res.json(contact);
+    });
   });
 })
 
@@ -60,8 +60,6 @@ app.put('/contacts/:token', (req, res) => {
   const token = req.params.token;
   getUserId(token).then(userId => {
     const contacts = req.body.contacts;
-    console.log(req);
-    console.log(req.body);
     const additionals = req.body.additionals;
     addContacts(contacts, additionals).then(
       res.sendStatus(200)
@@ -71,39 +69,51 @@ app.put('/contacts/:token', (req, res) => {
 
 app.get('/room/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
   const room_id = req.query.id;
-  const user_id = token;
-  if (room_id === undefined) {
-    getRooms(user_id).then( rooms => {
-      res.json(rooms);
-    });
-  } else {
-    const room = getRoom(user_id, room_id).then( room => {
-      if (room === null) {
-        res.json({});
+  const participant = req.query.participant;
+  getUserId(token).then(userId => {
+    if (room_id === undefined) {
+      if (participant === undefined) {
+        getRoomsByUserId(userId).then( rooms => {
+          res.json(rooms);
+        });
       } else {
-        res.json(room);
+        getRoomByParticipant(userId, participant).then( room => {
+          if (room === null) {
+            res.json({});
+          } else {
+            res.json(room);
+          }
+        })
       }
-    });
-  }
+    } else {
+      getRoomByRoomId(userId, room_id).then( room => {
+        if (room === null) {
+          res.json({});
+        } else {
+          res.json(room);
+        }
+      });
+    }
+  })
 })
 
 app.post('/room/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  const data = req.body;
-  if (data.updated_at === undefined) {
-    data.updated_at = new Date().toISOString();
-    createRoom(user_id, data).then(
-      res.sendStatus(201)
-    );
-  } else {
-    createRoom(user_id, data).then(
-      res.sendStatus(201)
-    );
-  }
+  getUserId(token)
+    .then(userId => {
+      const data = req.body;
+      if (data.updated_at === undefined) {
+        data.updated_at = new Date().toISOString();
+        createRoom(userId, data).then(
+          res.sendStatus(201)
+        );
+      } else {
+        createRoom(userId, data).then(
+          res.sendStatus(201)
+        );
+      }
+    });
 })
 
 app.put('/room/:token', (req, res) => {
@@ -120,11 +130,11 @@ app.put('/room/:token', (req, res) => {
 
 app.get('/recentMessages/:token', (req, res) => {
   const token = req.params.token;
-  // const user_id = getUserId(token);
-  const user_id = token;
-  getRecentMessages(user_id, data => {
-    res.json(data);
-  })
+  getUserId(token).then(userId => {
+    getRecentMessages(userId, data => {
+      res.json(data);
+    })
+  });
 })
 
 app.listen(port, () => {
