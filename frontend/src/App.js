@@ -15,7 +15,13 @@ import Chat from './Pages/Chat';
 import './App.css'
 
 export default function App() {
-  const [ user,setUser ] = useState("");
+  const [ user,setUser ] = useState({
+    token:"",
+    firstName: "",
+    lastName: "",
+    email:"",
+    role:"",
+  });
   const [showSidebar,setShowSidebar] = useState(false);
   return (
     <div className="App">

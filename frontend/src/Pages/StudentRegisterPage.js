@@ -79,19 +79,21 @@ export default function StudentRegisterPage() {
        setClasses(tempClassesArray)
     },[sectionDataDB])
 
-    
+
     const saveDetails = () => {
         selectedClasses.map(option => {
             console.log(option.value)
         })
         console.log(major.value)
         console.log(year)
-
+        
         // const requestUrl = `/eduall/student/${token}/${year}/${major}`
 
         // const { data, error } = fetchData("POST",requestUrl)
 
         // Push to the Home Page 
+
+
         history.push('/dashboard')
     }  
 

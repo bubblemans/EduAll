@@ -26,20 +26,35 @@ export default function Loginform() {
   }
 
   const verifyDetails = () => {
+    const userObject = {
+      token:"",
+      firstName: "",
+      lastName: "",
+      email:"",
+      role:"",
+    }
     let email = String(formDetails.email)
     let password = String(formDetails.password)
-    const url = "http://localhost:8080/api/users/" + email + "/" + password;
+    console.log(email)
+    console.log(password)
+    const url = "http://localhost:8080/api/users/"+ email+"/"+ password;
     fetch(url)
       .then(res => res.json())
       .then(data => {
         if (data.token){
-        setUser(data)
+        userObject.token = data.token
+        userObject.firstName = data.firstName
+        userObject.lastName = data.lastName
+        userObject.email = data.email
+        userObject.role = data.role
+        setUser(userObject)
         history.push("/dashboard")
       }else{
         alert.show(data.message)
       }
     })
   }
+
   return (
     <form onSubmit = {submitHandler}>
       <div className = "form-inner">
