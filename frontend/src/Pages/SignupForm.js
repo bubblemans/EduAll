@@ -36,6 +36,14 @@ export default function SignupForm() {
       pwd: formDetails.password,
       Role: userType.value
     }
+    const userObject = {
+      token:"",
+      firstName: "",
+      lastName: "",
+      email:"",
+      role:"",
+    }
+
     fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -45,7 +53,12 @@ export default function SignupForm() {
       .then(data => {
           if (data.token){
             // Get the token out of this data 
-            setUser(data);
+            userObject.token = data.token
+            userObject.firstName = data.firstName
+            userObject.lastName = data.lastName
+            userObject.email = data.email
+            userObject.role = data.role
+             setUser(userObject)
             if (userType.value === "Professor") {
               alert.show("Professor account created successfully")
               history.push("/register/professor");
