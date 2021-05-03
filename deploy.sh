@@ -1,11 +1,11 @@
 # mysql
-/etc/init.d/mysql start &
+sudo /etc/init.d/mysql start &
 
 # mongo
-systemctl start mongod &
+sudo systemctl start mongod &
 
 # redis
-redis-server &
+sudo redis-server &
 
 # frontend
 cd ./frontend
