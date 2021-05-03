@@ -2,12 +2,15 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ContextStore } from '../ContextStore';
 import { useHistory } from "react-router-dom";
 import '../App.css'
+import { useAlert } from 'react-alert'
 
 export default function Loginform() {
   const [formDetails, setFormDetails] = useState({email: "",password : ""})
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [ user, setUser ] = CurrentUser
   const [ showSidebar, setShowSidebar] = SideBar
+  const alert = useAlert()
+
   const history = useHistory()
   useEffect(() => {
       setShowSidebar(false)
@@ -31,8 +34,9 @@ export default function Loginform() {
       .then(data => {
         setUser(data)
         history.push("/dashboard")
-      })
-
+      }).catch((error) => {
+        alert.show(error)
+      });
   }
   return (
     <form onSubmit = {submitHandler}>

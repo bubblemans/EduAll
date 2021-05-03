@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ContextStore } from '../ContextStore';
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
+import { useAlert } from 'react-alert'
 
 export default function SignupForm() {
   const [formDetails, setFormDetails] = useState({email: "", password : "", firstName : "", lastName: ""})
@@ -9,6 +10,7 @@ export default function SignupForm() {
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [ user, setUser ] = CurrentUser;
   const [ showSidebar, setShowSidebar] = SideBar;
+  const alert = useAlert()
 
   const history = useHistory()
   useEffect(() => {
@@ -40,17 +42,21 @@ export default function SignupForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data !== null) {
-          setUser(data);
-          if (role === "Professor") {
-            history.push("/register/professor");
-          } else if (role === "Student") {
-            history.push("/register/student");
-          }
+    .then(res => res.json())
+    .then(data => {
+      if (data !== null) {
+        setUser(data);
+        if (role === "Professor") {
+          alert.show("Professor Account Created Successfully")
+          history.push("/register/professor");
+        } else if (role === "Student") {
+          alert.show("Student Account Created Successfully")
+          history.push("/register/student");
         }
-      })
+      }
+    }).catch((error) => {
+      alert.show(error)
+    });
   }
 
   return (
