@@ -2,10 +2,12 @@ import React, { useContext, useEffect }from 'react'
 import { ContextStore } from '../ContextStore';
 import '../App.css'
 import  ClassCard  from '../Components/ClassCard'
+import { useAlert } from 'react-alert'
 
 export default function Dashboard () {
     const { SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
+    const alert = useAlert()
     const classData = [
         {
             code: "CS 147",
@@ -66,6 +68,7 @@ export default function Dashboard () {
     ]
     useEffect(() => {
         setShowSidebar(true)
+        alert.show("Sign in successfull!")
     },[])
     const colors = ["#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4"]
     return(
@@ -76,7 +79,6 @@ export default function Dashboard () {
             <div className="heading">Classes</div>
             <div className="container"> 
                 {classData.map((item,i)=> {
-                    console.log(i)
                     return(
                         <ClassCard code={item.code} name={item.name} days={item.days} time={item.time} grade={item.grade} color={colors[i]}/>
                     )

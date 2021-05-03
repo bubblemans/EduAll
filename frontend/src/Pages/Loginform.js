@@ -2,12 +2,15 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ContextStore } from '../ContextStore';
 import { useHistory } from "react-router-dom";
 import '../App.css'
+import { useAlert } from 'react-alert'
 
 export default function Loginform() {
   const [formDetails, setFormDetails] = useState({email: "",password : ""})
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [ user, setUser ] = CurrentUser
   const [ showSidebar, setShowSidebar] = SideBar
+  const alert = useAlert()
+
   const history = useHistory()
   useEffect(() => {
       setShowSidebar(false)
@@ -23,16 +26,19 @@ export default function Loginform() {
   }
 
   const verifyDetails = () => {
-    let email = formDetails.email;
-    let password = formDetails.password;
+    let email = String(formDetails.email)
+    let password = String(formDetails.password)
     const url = "http://localhost:8080/api/users/" + email + "/" + password;
     fetch(url)
       .then(res => res.json())
       .then(data => {
+        if (data.token){
         setUser(data)
         history.push("/dashboard")
-      })
-
+      }else{
+        alert.show(data.message)
+      }
+    })
   }
   return (
     <form onSubmit = {submitHandler}>

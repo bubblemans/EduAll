@@ -20,20 +20,58 @@ const classes = [
 export default function StudentRegisterPage() {
     const { CurrentUser, SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
+    const [classes,setClasses] = useState([])
+    const [majors,setMajors] = useState([])
+
     const [year, setYear] = useState("")
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [major, setMajor] = useState([]);
-    const { fetchData } = useApi()
+    const [sectionDataDB, setSectionDataDB] = useState([])
+    const [classDataDB, setClassDataDB] = useState([])
+
+    const [addClass, setAddClass] = useState({
+        sectionId:"",
+        courseName:"",
+        semester: "",
+        courseId: "",
+    })
 
     const history = useHistory()
+
     useEffect(() => {
         setShowSidebar(false)
+        const sectionUrl = "http://localhost:8081/eduall/section"
+        fetch(sectionUrl)
+        .then(res => res.json())
+        .then(data => {
+            setSectionDataDB(data)
+        })
+
+        const classUrl = "http://localhost:8081/eduall/course"
+        fetch(classUrl)
+        .then(res => res.json())
+        .then(data => {
+            setClassDataDB(data)
+        })
     },[])
 
     const submitHandler = e => {
         e.preventDefault();
-        saveDetails()
+        console.log(classes)
+        // saveDetails()
     }
+
+
+    useEffect(()=> {
+       console.log(sectionDataDB)
+       sectionDataDB.map(section => {
+           let classD = {
+             label: section.course_name + " - " + section.section_id + ` ${section.semester} ${section.year} `,
+             value: section.course_id
+           }
+           setClasses(classes => [...classes,classD])
+       })
+    },[sectionDataDB])
 
     const saveDetails = () => {
         selectedClasses.map(option => {
