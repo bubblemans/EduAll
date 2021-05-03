@@ -4,22 +4,10 @@ import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { useApi } from '../Components/useApi';
 
-const classes = [
-    { value: "CS 157C", label: "CS 157C" },
-    { value: "CS 160", label: "CS 160" },
-    { value: "CS 154", label: "CS 154" },
-  ];
-
-  const majors = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Software Engineering", label: "Software Engineering" },
-    { value: "Political Science", label: "Political Science" },
-    { value: "Business", label: "Business" },
-  ];
-
 export default function StudentRegisterPage() {
     const { CurrentUser, SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
+
     const [classes,setClasses] = useState([])
     const [majors,setMajors] = useState([])
 
@@ -57,22 +45,41 @@ export default function StudentRegisterPage() {
 
     const submitHandler = e => {
         e.preventDefault();
-        console.log(classes)
-        // saveDetails()
+        saveDetails()
     }
 
+    useEffect(()=> {
+        let tempDeptArray= []
+        let tempMajorsArray = []
+        classDataDB.map(classObj => {
+            if(!tempDeptArray.includes(classObj.department)) tempDeptArray.push(classObj.department)
+        })
+
+        tempDeptArray.map(classObj => {
+            let classD = {
+                label: classObj,
+                value: classObj
+            }
+            tempMajorsArray.push(classD)
+        })
+        setMajors(tempMajorsArray)
+    },[classDataDB])
+ 
 
     useEffect(()=> {
-       console.log(sectionDataDB)
+    let tempClassesArray = []
+
        sectionDataDB.map(section => {
            let classD = {
              label: section.course_name + " - " + section.section_id + ` ${section.semester} ${section.year} `,
              value: section.course_id
            }
-           setClasses(classes => [...classes,classD])
+           tempClassesArray.push(classD)
        })
+       setClasses(tempClassesArray)
     },[sectionDataDB])
 
+    
     const saveDetails = () => {
         selectedClasses.map(option => {
             console.log(option.value)
