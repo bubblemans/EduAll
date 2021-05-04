@@ -34,7 +34,7 @@ export default function SignupForm() {
       lastName: formDetails.lastName,
       email: formDetails.email,
       pwd: formDetails.password,
-      Role: userType.value
+      role: userType.value
     }
     const userObject = {
       token:"",

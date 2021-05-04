@@ -7,6 +7,7 @@ import { useApi } from '../Components/useApi';
 export default function StudentRegisterPage() {
     const { CurrentUser, SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
+    const [ user, setUser ] = CurrentUser;
 
     const [classes,setClasses] = useState([])
     const [majors,setMajors] = useState([])
@@ -72,7 +73,7 @@ export default function StudentRegisterPage() {
        sectionDataDB.map(section => {
            let classD = {
              label: section.course_name + " - " + section.section_id + ` ${section.semester} ${section.year} `,
-             value: section.course_id
+             value: section.id
            }
            tempClassesArray.push(classD)
        })
@@ -81,20 +82,49 @@ export default function StudentRegisterPage() {
 
 
     const saveDetails = () => {
+
+        const studentToken = String(user.token)
+        let selectedClassesArray = []
+        const studentYear = Number(year)
+        const studentMajor = String(major.value)
+
         selectedClasses.map(option => {
-            console.log(option.value)
+            selectedClassesArray.push(Number(option.value))
         })
-        console.log(major.value)
-        console.log(year)
-        
-        // const requestUrl = `/eduall/student/${token}/${year}/${major}`
+        const createStudentRequestUrl = `http://localhost:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
 
-        // const { data, error } = fetchData("POST",requestUrl)
+        const createClassesRequestUrl = `http://localhost:8081/eduall/student/${studentToken}`
 
-        // Push to the Home Page 
+        const body = {
+            sectionIds: selectedClassesArray
+        }
+
+        fetch(createStudentRequestUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        .then(res => res.json())
+        .then(data => {
+            if (data.id){
+                fetch(createClassesRequestUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                  })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    history.push('/dashboard')
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
+        }).catch(error => {
+            console.log(error)
+        })
 
 
-        history.push('/dashboard')
+
     }  
 
     return (
