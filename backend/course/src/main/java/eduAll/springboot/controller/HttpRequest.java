@@ -58,7 +58,7 @@ public class HttpRequest {
 		update += "\"additionals\": " + "[" + id + "] }";
 
 		
-		URL url = new URL("http://localhost:3000/contacts/" + token);
+		URL url = new URL("http://localhost:4000/contacts/" + token);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("PUT");
 		con.setDoOutput(true);
