@@ -4,11 +4,11 @@ import EdiText from "react-editext";
 import { ContextStore } from "../ContextStore";
 
 function Usercard() {
-  const [name, setfirstName] = useState("Batman");
-  const [lastName, setlastName] = useState("Robin");
-  const [password, setPassword] = useState("pwd");
-  const [email, setEmail] = useState("bNewEmail.com");
-  const [bio, setBio] = useState("No Bio Yet");
+  const [name, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
 
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [showSidebar, setShowSidebar] = SideBar;
@@ -34,7 +34,7 @@ function Usercard() {
     setBio(val); 
   };
   const getInfo = () => {
-    const url = "http://localhost:8080/api/users/" + email + "/" + password;
+    const url = "http://localhost:8080/api/users/" + user.email + "/" + user.pwd;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
