@@ -68,7 +68,6 @@ export default function Dashboard () {
     ]
     useEffect(() => {
         setShowSidebar(true)
-        alert.show("Sign in successfull!")
     },[])
     const colors = ["#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4"]
     return(

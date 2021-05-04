@@ -122,9 +122,6 @@ export default function StudentRegisterPage() {
         }).catch(error => {
             console.log(error)
         })
-
-
-
     }  
 
     return (

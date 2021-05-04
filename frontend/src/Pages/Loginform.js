@@ -49,6 +49,7 @@ export default function Loginform() {
         userObject.role = data.role
         setUser(userObject)
         history.push("/dashboard")
+        alert.show("Sign in successfull!")
       }else{
         alert.show(data.message)
       }
