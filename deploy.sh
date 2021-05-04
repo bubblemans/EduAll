@@ -9,7 +9,7 @@ sudo redis-server &
 
 # frontend
 cd ./frontend
-npm start &
+REACT_APP_BASE_URL=http://localhost npm start &
 
 # chat
 cd ../backend/chat

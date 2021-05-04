@@ -15,7 +15,7 @@ export default function FileUpload() {
 
   function fetchExistingFiles() {
     const token = user.token;
-    const url = 'http://localhost:5000/file?token=' + token;
+    const url = process.env.REACT_APP_BASE_URL + ':5000/file?token=' + token;
     fetch(url)
       .then(res => res.json())
       .then(data => setFileData(data))
@@ -33,7 +33,7 @@ export default function FileUpload() {
 
   function uploadFile(file, name) {
     const token = user.token;
-    const url = 'http://localhost:5000/file/' + name + '?token=' + token;
+    const url = process.env.REACT_APP_BASE_URL + ':5000/file/' + name + '?token=' + token;
     const formData = new FormData();
 		formData.append('file', file);
     return fetch(url, {
@@ -46,7 +46,7 @@ export default function FileUpload() {
     <div className="file-upload">
         <input type="file" onChange={handleUpload}/>
       {fileData.map(item=> {
-        return <FileCard name={item.name}  description={item.description} date={item.date}  />
+        return <FileCard name={item.name}  description={item.description} date={item.date} token={user.token}  />
       })}
     </div>
   )

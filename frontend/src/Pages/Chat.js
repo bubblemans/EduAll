@@ -8,7 +8,7 @@ import ChatMessage from "./ChatMessage";
 import ChatListItem from "./ChatListItem";
 import { ContextStore } from "../ContextStore";
 
-const URL = "http://localhost:3030";
+const SOCKET_URL = process.env.REACT_APP_BASE_URL + ":3030";
 
 
 const io = require("socket.io-client");
@@ -53,7 +53,7 @@ export default function Chat() {
   }, [messages])
 
   const getSearchBarOptions = () => {
-    var url = "http://localhost:4000/contact/" + user.token;
+    var url = process.env.REACT_APP_BASE_URL + ":4000/contact/" + user.token;
     fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -62,7 +62,7 @@ export default function Chat() {
   }
 
   const getRecentMessages = () => {
-    const url = "http://localhost:4000/recentMessages/" + user.token;
+    const url = process.env.REACT_APP_BASE_URL + ":4000/recentMessages/" + user.token;
     fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -75,7 +75,7 @@ export default function Chat() {
     if (socket) {
       socket.disconnect();
     }
-    socket = io.connect(URL);
+    socket = io.connect(SOCKET_URL);
     socket.emit("join", id);
     socket.on("chat", data => {
       addMessages(data);
@@ -114,7 +114,7 @@ export default function Chat() {
   }
 
   const getRoomId = participant => {
-    const url = "http://localhost:4000/room/" + user.token + "?participant=" + participant;
+    const url = process.env.REACT_APP_BASE_URL + ":4000/room/" + user.token + "?participant=" + participant;
     return fetch(url)
     .then(res => res.json())
     .then(data => {
@@ -133,7 +133,7 @@ export default function Chat() {
   }
 
   const createRoom = participant => {
-    const url = "http://localhost:4000/room/" + user.token + "?participant=" + participant;
+    const url = process.env.REACT_APP_BASE_URL + ":4000/room/" + user.token + "?participant=" + participant;
     const body = {
       name: "Room",
       participants: [user.id, participant]
@@ -159,7 +159,7 @@ export default function Chat() {
   }
 
   const getRoomNameById = (id) => {
-    const url = "http://localhost:4000/room/" + user.token + "?id=" + id;
+    const url = process.env.REACT_APP_BASE_URL + ":4000/room/" + user.token + "?id=" + id;
     return fetch(url)
       .then(res => res.json())
       .then(data => {

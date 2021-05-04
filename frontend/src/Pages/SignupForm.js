@@ -26,7 +26,7 @@ export default function SignupForm() {
   ];
 
   const handleRegister = () => {
-    const url = "http://localhost:8080/api/users/";
+    const url = process.env.REACT_APP_BASE_URL + ":8080/api/users/";
     const role = userType.value;
     const body = {
       firstName: formDetails.firstName,
