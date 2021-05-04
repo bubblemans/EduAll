@@ -7,12 +7,6 @@ import Usercard from '../Components/Usercard'
 
 function Userpage()
 {
-    const { CurrentUser, SideBar } = useContext(ContextStore);
-    const [ showSidebar, setShowSidebar] = SideBar
-    useEffect(() => {
-        setShowSidebar(true)
-    },[])
-
     return(
         <div className = "uP">
             <Usercard/>
