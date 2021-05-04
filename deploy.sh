@@ -31,4 +31,5 @@ mvn spring-boot:run &
 cd ../file
 export FLASK_APP=app.py
 export MONGO_URI=mongodb://localhost:27017/eduAll
+export BASE_URL=http://localhost
 flask run --host=0.0.0.0 &
