@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import "../App.css";
-import EdiText from "react-editext";
+import { EditText } from "react-edit-text";
 import { ContextStore } from "../ContextStore";
 
 function Usercard() {
@@ -21,7 +21,7 @@ function Usercard() {
 
   const handleSaveFirst = (val) => {
     console.log("Edited Value -> ", val);
-    setfirstName(val); 
+    setfirstName(val);
   };
 
   const handleSaveLast = (val) => {
@@ -31,7 +31,7 @@ function Usercard() {
 
   const handleSaveBio = (val) => {
     console.log("Edited Value -> ", val);
-    setBio(val); 
+    setBio(val);
   };
   const getInfo = () => {
     const url = "http://localhost:8080/api/users/" + user.email + "/" + user.pwd;
@@ -73,15 +73,15 @@ function Usercard() {
           <h3>
             {" "}
             First Name :
-            <EdiText type="text" value={user.firstName} onSave={handleSaveFirst} />
+            <EditText type="text" value={user.firstName} onSave={handleSaveFirst} />
             Last Name :
-            <EdiText type="text" value={user.lastName} onSave={handleSaveLast} />
+            <EditText type="text" value={user.lastName} onSave={handleSaveLast} />
           </h3>
 
           <h4>Email :<br></br>{user.email}</h4>
           <h5>
             Biography :
-            <EdiText type="text" value={user.bio} onSave={handleSaveBio} />
+            <EditText type="text" value={user.bio} onSave={handleSaveBio} />
           </h5>
         </div>
         <div className="example_a">
