@@ -1,22 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
 import "../App.css";
-import { EditText } from "react-edit-text";
+import EdiText from 'react-editext';
 import { ContextStore } from "../ContextStore";
 
 function Usercard() {
-  const [name, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
-
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [showSidebar, setShowSidebar] = SideBar;
   const [user, setUser] = CurrentUser;
 
+  const [name, setfirstName] = useState(user.firstName);
+  const [lastName, setlastName] = useState(user.lastName);
+  const [password, setPassword] = useState(user.pwd);
+  const [email, setEmail] = useState(user.email);
+  const [bio, setBio] = useState(user.bio);
+
   useEffect(() => {
     setShowSidebar(true);
-    getInfo();
   }, []);
 
   const handleSaveFirst = (val) => {
@@ -33,16 +32,8 @@ function Usercard() {
     console.log("Edited Value -> ", val);
     setBio(val);
   };
-  const getInfo = () => {
-    const url = "http://localhost:8080/api/users/" + user.email + "/" + user.pwd;
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data);
-      });
-  };
 
-  const changeInfo = () => {
+const changeInfo = () => {
     const url = "http://localhost:8080/api/users/" + user.id;
     const body = {
       firstName: name,
@@ -55,8 +46,13 @@ function Usercard() {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    });
+    })
+      .then(res => res.json())
+      .then(data => {
+        setUser(data);
+      })
   };
+
   return (
     <div className="Usercard">
       <div className="upper-container"></div>
@@ -73,15 +69,15 @@ function Usercard() {
           <h3>
             {" "}
             First Name :
-            <EditText type="text" value={user.firstName} onSave={handleSaveFirst} />
+            <EdiText type="text" value={user.firstName} onSave={handleSaveFirst} />
             Last Name :
-            <EditText type="text" value={user.lastName} onSave={handleSaveLast} />
+            <EdiText type="text" value={user.lastName} onSave={handleSaveLast} />
           </h3>
 
           <h4>Email :<br></br>{user.email}</h4>
           <h5>
             Biography :
-            <EditText type="text" value={user.bio} onSave={handleSaveBio} />
+            <EdiText type="text" value={user.bio} onSave={handleSaveBio} />
           </h5>
         </div>
         <div className="example_a">
