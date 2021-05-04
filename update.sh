@@ -1,25 +1,19 @@
 # frontend
 cd ./frontend
-REACT_APP_BASE_URL=http://localhost npm start &
+npm install &
 
 # chat
 cd ../backend/chat
-npm start &
+npm install &
 
 # chat-api
 cd ../chat-api
-npm start &
+npm install &
 
-# course
-cd ../course
-mvn spring-boot:run &
-
-# user(springCrudAPI)
-cd ../springCrudAPI
-mvn spring-boot:run &
+# course and user(springCrudAPI)
+sudo apt install maven
 
 # file
 cd ../file
-export FLASK_APP=app.py
-export MONGO_URI=mongodb://localhost:27017/eduAll
-flask run --host=0.0.0.0 &
+sudo apt install python3-pip
+pip3 install -r requirements.txt &
