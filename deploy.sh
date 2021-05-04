@@ -1,15 +1,15 @@
 # mysql
-/etc/init.d/mysql start &
+sudo /etc/init.d/mysql start &
 
 # mongo
-systemctl start mongod &
+sudo systemctl start mongod &
 
 # redis
-redis-server &
+sudo redis-server &
 
 # frontend
 cd ./frontend
-npm start &
+REACT_APP_BASE_URL=http://localhost npm start &
 
 # chat
 cd ../backend/chat
@@ -31,4 +31,5 @@ mvn spring-boot:run &
 cd ../file
 export FLASK_APP=app.py
 export MONGO_URI=mongodb://localhost:27017/eduAll
+export BASE_URL=http://localhost
 flask run --host=0.0.0.0 &

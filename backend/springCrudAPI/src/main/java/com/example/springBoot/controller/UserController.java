@@ -1,6 +1,7 @@
 package com.example.springBoot.controller;
 
 import com.example.springBoot.exception.DuplicateResourceFoundException;
+import com.example.springBoot.exception.NullPtrException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +32,6 @@ public class UserController {
 
 	@Autowired //Injected user repository annotation
 	private UserRepository userRepository;
-	private String response;
 
 	//Get all users
 	@GetMapping
@@ -42,7 +42,6 @@ public class UserController {
 	//Get the user by ID
 	@GetMapping("/{id}")
 	public User getUserByID(@PathVariable(value = "id") long userId) {
-
 		if(this.userRepository.existsById(userId)) {
 			return this.userRepository.findById(userId).
 				orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
@@ -77,39 +76,36 @@ public class UserController {
 
 	//Create user
 	@PostMapping
-	public User createUser(@Valid @RequestBody User user) {
-		try{
-			User user2 = userRepository.findByEmail(user.getEmail());
-			if(user2 == null) {
-				String tk = user.generateToken(user.getID());
-				user.setToken(tk);
-				return this.userRepository.save(user);
-			}
-			else {
-				throw new DuplicateResourceFoundException("User already exists, try logging in.");
-			}
+	public User createUser( @RequestBody User user) {
+		User user2 = userRepository.findByEmail(user.getEmail());
+
+		if(user2 == null) {
+			this.userRepository.save(user);
+			String tk = user.generateToken(user.getID());
+			user.setToken(tk);
+			user.setRole(user.getRole());
+			return this.userRepository.save(user);
 		}
-		catch (Exception e){
-			throw new DuplicateResourceFoundException("Email already exists.");
+		else {
+			throw new DuplicateResourceFoundException("User already exists, try logging in.");
 		}
 	}
 
 	//Update user
 	@PutMapping("/{id}")
 	public User updateUser(@RequestBody User user, @PathVariable("id") long userId) {
-
 		if(this.userRepository.existsById(userId)) {
 			User existingUserObj =  this.userRepository.findById(userId).
 					orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
 
 			existingUserObj.setFirstName(user.getFirstName());
 			existingUserObj.setLastName(user.getLastName());
-			existingUserObj.setEmail(user.getEmail());
+//			existingUserObj.setEmail(user.getEmail());
 			existingUserObj.setPwd(user.getPwd());
 			existingUserObj.setBio(user.getBio());
+			System.out.println(existingUserObj.getID()+ "id is");
 
-			return this.userRepository.save(existingUserObj);
-
+			return existingUserObj;
 		}
 		else {
 			throw new ResourceNotFoundException("User not found with the ID: " + userId);
@@ -119,7 +115,6 @@ public class UserController {
 	//Delete user by ID
 	@DeleteMapping("/{id}/")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") long userId){
-
 		if(this.userRepository.existsById(userId)) {
 			User existingUserObj = this.userRepository.findById(userId).
 					orElseThrow(() -> new ResourceNotFoundException("User not found with the ID: " + userId));
@@ -142,11 +137,18 @@ public class UserController {
 			User user2 = userRepository.searchByToken(token);
 			userId = String.valueOf(user2.getID());
 			js.put("userID", userId);
+			return js;
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			if(token.equals("")) {
+				System.out.println("token in 1" + token);
+				throw new NullPtrException("Cannot find user. Token is null");
+			}
+			else {
+				System.out.println("token in 2" + token);
+				throw new ResourceNotFoundException("User with the Token : " + token + " not found");
+			}
 		}
-		return js;
 	}
 }
 

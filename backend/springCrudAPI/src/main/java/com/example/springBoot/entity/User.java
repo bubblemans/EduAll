@@ -50,8 +50,9 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		
 	}
 		
-	public User(String firstName, String lastName, String email, String Password, String Role, String Bio){
+	public User(long ID, String firstName, String lastName, String email, String Password, String Role, String Bio){
 		super();
+		this.ID = ID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -59,6 +60,8 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		this.Role = Role;
 		this.Bio = Bio;
 		this.Token = generateToken(this.ID);
+//		this.Token = generateToken(this.ID);
+		
 	}
 	
 	public long getID() {

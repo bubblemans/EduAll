@@ -1,5 +1,5 @@
 import React from 'react'
-import { AiFillHome } from 'react-icons/ai'
+import { AiFillHome, AiOutlineUser } from 'react-icons/ai'
 import { AiFillFilePdf } from 'react-icons/ai'
 import { GoGraph } from 'react-icons/go'
 import { FaVideo } from 'react-icons/fa'
@@ -31,6 +31,13 @@ export const SidebarData = [
         title:'Files',
         path:'/file',
         icon: < AiFillFilePdf/>,
+        cName: 'nav-text'
+    },
+    ,
+    {
+        title:'Profile',
+        path:'/user',
+        icon: < AiOutlineUser/>,
         cName: 'nav-text'
     },
     {

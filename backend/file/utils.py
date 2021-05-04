@@ -7,7 +7,7 @@ API_URL = os.environ.get('API_URL')
 logging.basicConfig(level=logging.DEBUG)
 
 def get_user_id(token):
-    url = 'http://host.docker.internal:8080/api/users/1/token?token={}'.format(token)
+    url = os.environ.get('BASE_URL') + ':8080/api/users/1/token?token={}'.format(token)
     res = requests.get(url)
     user_id = res.json()['userID']
     return user_id
