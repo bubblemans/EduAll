@@ -38,7 +38,8 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 	@Size(min = 0, max = 250)
 	@Column(name = "Bio")
 	private String Bio;
-	
+
+	@NotBlank(message = "Field must not be left empty") @Size(min = 1, max = 250)
 	@Column(name = "Role")
 	private String Role;
 		
@@ -58,7 +59,6 @@ public class User { // Creating a user GP entity that is mapped to the table spe
 		this.Role = Role;
 		this.Bio = Bio;
 		this.Token = generateToken(this.ID);
-		
 	}
 	
 	public long getID() {

@@ -93,7 +93,7 @@ export default function StudentRegisterPage() {
         })
         const createStudentRequestUrl = `http://localhost:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
 
-        const createClassesRequestUrl = `http://localhost:8081/eduall/student/${studentToken}`
+        const createClassesRequestUrl = `http://localhost:8081/eduall/grade/${studentToken}`
 
         const body = {
             sectionIds: selectedClassesArray
@@ -109,7 +109,7 @@ export default function StudentRegisterPage() {
                 fetch(createClassesRequestUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body)
+                    body: JSON.stringify(selectedClassesArray)
                   })
                 .then(res => res.json())
                 .then(data => {

@@ -31,8 +31,7 @@ public class HttpRequest {
 	
     // call HTTP GET request to user service and get userId
 	public static long getUserId(String token) throws Exception {
-		
-		URL url = new URL("http://localhost:8080/api/users/1/token?token=" + token);
+		URL url = new URL("http://localhost:8080/api/users/getStudent/" + token);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		
@@ -58,7 +57,7 @@ public class HttpRequest {
 		update += "\"additionals\": " + "[" + id + "] }";
 
 		
-		URL url = new URL("http://localhost:3000/contacts/" + token);
+		URL url = new URL("http://localhost:4000/contacts/" + token);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("PUT");
 		con.setDoOutput(true);
