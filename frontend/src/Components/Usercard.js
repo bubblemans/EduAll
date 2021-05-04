@@ -34,7 +34,7 @@ function Usercard() {
   };
 
 const changeInfo = () => {
-    const url = "http://localhost:8080/api/users/" + user.id;
+    const url = process.env.REACT_APP_BASE_URL + ":8080/api/users/" + user.id;
     const body = {
       firstName: name,
       lastName: lastName,
