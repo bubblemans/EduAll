@@ -4,12 +4,12 @@ import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { useApi } from '../Components/useApi';
 
-  const departments = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Software Engineering", label: "Software Engineering" },
-    { value: "Political Science", label: "Political Science" },
-    { value: "Business", label: "Business" },
-  ];
+//   const departments = [
+//     { value: "Computer Science", label: "Computer Science" },
+//     { value: "Software Engineering", label: "Software Engineering" },
+//     { value: "Political Science", label: "Political Science" },
+//     { value: "Business", label: "Business" },
+//   ];
 
 export default function ProfessorRegisterPage() {
     const [year, setYear] = useState("")
@@ -18,7 +18,37 @@ export default function ProfessorRegisterPage() {
     const [ showSidebar, setShowSidebar] = SideBar
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [department, setDepartment] = useState([]);
+    const [departmentData, setDepartmentData] = useState([]);
+
     const { fetchData } = useApi()
+    const [classDataDB, setClassDataDB] = useState([])
+
+    useEffect(()=>{
+        const classUrl = "http://localhost:8081/eduall/course"
+        fetch(classUrl)
+        .then(res => res.json())
+        .then(data => {
+            setClassDataDB(data)
+        })
+
+    },[])
+
+    useEffect(()=> {
+        let tempDeptArray= []
+        let tempMajorsArray = []
+        classDataDB.map(classObj => {
+            if(!tempDeptArray.includes(classObj.department)) tempDeptArray.push(classObj.department)
+        })
+
+        tempDeptArray.map(classObj => {
+            let classD = {
+                label: classObj,
+                value: classObj
+            }
+            tempMajorsArray.push(classD)
+        })
+        setDepartmentData(tempMajorsArray)
+    },[classDataDB])
 
     const history = useHistory()
     useEffect(() => {
@@ -31,6 +61,9 @@ export default function ProfessorRegisterPage() {
     }
 
     const saveDetails = () => {
+
+        const professorToken = String(user.token)
+        
         selectedClasses.map(option => {
             console.log(option.value)
         })
@@ -55,7 +88,7 @@ export default function ProfessorRegisterPage() {
                     <input type = "text" name = "year" id = "year" onChange = {e => setYear(e.target.value)}/>
                     <br/>
                     <label htmlFor ="department">Department :</label>
-                    <Select options={departments} value={department} defaultValue={department} onChange={setDepartment} placeholder="Select your Department..."/>
+                    <Select options={departmentData} value={department} defaultValue={department} onChange={setDepartment} placeholder="Select your Department..."/>
                     <br/>
                 </div>
                 <input type = "submit" value = "Login"/>
