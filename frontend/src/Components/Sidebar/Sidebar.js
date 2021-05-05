@@ -9,19 +9,30 @@ export default function Navbar() {
         <>
          <IconContext.Provider value={{'color':"white"}}>
             <nav className={'nav-menu active'}>
-                <ul className='nav-menu-items' >  
+                <ul className='nav-menu-items' >
                     <li className="navbar-toggle">
                         <div>EduAll</div>
                     </li>
                     {SidebarData.map((item,index)=> {
-                        return (
-                            <li key={index} className={item.cName}>
-                                <Link to={item.path}>
-                                    {item.icon}
-                                   <span> {item.title}</span>
-                                </Link>
-                            </li>
-                        )
+                        if (item.title == "Video") {
+                            return (
+                                <li key={index} className={item.cName}>
+                                    <Link to={{ pathname: "https://video-app-1664-6374-dev.twil.io/?passcode=05049216646374" }} target="_blank">
+                                        {item.icon}
+                                       <span> {item.title}</span>
+                                    </Link>
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li key={index} className={item.cName}>
+                                    <Link to={item.path}>
+                                        {item.icon}
+                                       <span> {item.title}</span>
+                                    </Link>
+                                </li>
+                            )
+                        }
                     })}
                 </ul>
             </nav>
