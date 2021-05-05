@@ -11,6 +11,7 @@ const contactSchema = new mongoose.Schema({
 var Contact = mongoose.model('contactModel', contactSchema, 'contact');
 
 async function getContact(id) {
+  console.log(id);
   const doc = await Contact.find({'user_id': id});
   const users = await doc[0].contacts.map( async (userId) => {
     const user = await getUser(userId);
@@ -105,7 +106,7 @@ async function getRoomByRoomId(user_id, room_id) {
 }
 
 async function getRoomByParticipant(user_id, participant) {
-  const doc = await Room.findOne({'participants': user_id, 'participants': participant});
+  const doc = await Room.findOne( {'participants': {$all: [user_id, participant]}} );
   return doc;
 }
 

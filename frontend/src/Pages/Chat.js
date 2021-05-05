@@ -66,8 +66,10 @@ export default function Chat() {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        setRecentMessages(data);
-        setNumRoom(data.number_of_rooms);
+        if (data != null) {
+          setRecentMessages(data);
+          setNumRoom(data.number_of_rooms);
+        }
       })
   }
 
@@ -123,6 +125,7 @@ export default function Chat() {
       } else {
         return createRoom(participant)
           .then( () => {
+            console.log("called?")
             getRoomId(participant)
             .then(roomObject => {
               return roomObject;
@@ -134,6 +137,7 @@ export default function Chat() {
 
   const createRoom = participant => {
     const url = process.env.REACT_APP_BASE_URL + ":4000/room/" + user.token + "?participant=" + participant;
+    console.log(user);
     const body = {
       name: "Room",
       participants: [user.id, participant]

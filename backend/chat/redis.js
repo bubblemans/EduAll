@@ -10,6 +10,7 @@ client.on("connect", () => {
 async function updateAllParticipants(data) {
   const roomId = data.room_id;
   const token = data.token;
+  console.log(data);
   return getAllParticipants(token, roomId)
    .then(participants => {
     participants.forEach(paricipant => {

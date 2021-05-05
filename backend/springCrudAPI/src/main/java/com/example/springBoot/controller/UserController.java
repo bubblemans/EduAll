@@ -60,11 +60,11 @@ public class UserController {
 			}
 			else{
 				throw new ResourceNotFoundException("User not found");
-			} 
+			}
 		}
 		else{
 			throw new ResourceNotFoundException("User not found");
-		} 
+		}
 		// User u = this.userRepository.searchByEmailAndPWD(email, Password);
 		// if(this.userRepository.existsById(u.getID())){
 		// 	return u;
@@ -127,9 +127,9 @@ public class UserController {
 	}
 
 	//Get userId by Token
-	@GetMapping("/getStudent/{token}")
+	@GetMapping("/{id}/token")
 	@ResponseBody
-	public Map<String,Object> getIdByToken(@PathVariable("token") String token){
+	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
 		String userId = "", jsId = "";
 		Map<String, Object> js = new LinkedHashMap<>();
 

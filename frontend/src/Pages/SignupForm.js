@@ -53,13 +53,13 @@ export default function SignupForm() {
       .then(res => res.json())
       .then(data => {
           if (data.token){
-            // Get the token out of this data 
+            // Get the token out of this data
             userObject.token = data.token
             userObject.firstName = data.firstName
             userObject.lastName = data.lastName
             userObject.email = data.email
             userObject.role = data.role
-             setUser(userObject)
+            setUser(data);
             if (userType.value === "Professor") {
               alert.show("Professor account created successfully")
               history.push("/register/professor");
