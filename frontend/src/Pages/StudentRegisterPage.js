@@ -4,30 +4,44 @@ import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import { useApi } from '../Components/useApi';
 
-const classes = [
-    { value: "CS 157C", label: "CS 157C" },
-    { value: "CS 160", label: "CS 160" },
-    { value: "CS 154", label: "CS 154" },
-  ];
-
-  const majors = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Software Engineering", label: "Software Engineering" },
-    { value: "Political Science", label: "Political Science" },
-    { value: "Business", label: "Business" },
-  ];
-
 export default function StudentRegisterPage() {
     const { CurrentUser, SideBar } = useContext(ContextStore);
     const [ showSidebar, setShowSidebar] = SideBar
+    const [ user, setUser ] = CurrentUser;
+
+    const [classes,setClasses] = useState([])
+    const [majors,setMajors] = useState([])
+
     const [year, setYear] = useState("")
     const [selectedClasses, setSelectedClasses] = useState([]);
     const [major, setMajor] = useState([]);
-    const { fetchData } = useApi()
+    const [sectionDataDB, setSectionDataDB] = useState([])
+    const [classDataDB, setClassDataDB] = useState([])
+
+    const [addClass, setAddClass] = useState({
+        sectionId:"",
+        courseName:"",
+        semester: "",
+        courseId: "",
+    })
 
     const history = useHistory()
+
     useEffect(() => {
         setShowSidebar(false)
+        const sectionUrl = "http://localhost:8081/eduall/section"
+        fetch(sectionUrl)
+        .then(res => res.json())
+        .then(data => {
+            setSectionDataDB(data)
+        })
+
+        const classUrl = "http://localhost:8081/eduall/course"
+        fetch(classUrl)
+        .then(res => res.json())
+        .then(data => {
+            setClassDataDB(data)
+        })
     },[])
 
     const submitHandler = e => {
@@ -35,19 +49,79 @@ export default function StudentRegisterPage() {
         saveDetails()
     }
 
-    const saveDetails = () => {
-        selectedClasses.map(option => {
-            console.log(option.value)
+    useEffect(()=> {
+        let tempDeptArray= []
+        let tempMajorsArray = []
+        classDataDB.map(classObj => {
+            if(!tempDeptArray.includes(classObj.department)) tempDeptArray.push(classObj.department)
         })
-        console.log(major.value)
-        console.log(year)
 
-        // const requestUrl = `/eduall/student/${token}/${year}/${major}`
+        tempDeptArray.map(classObj => {
+            let classD = {
+                label: classObj,
+                value: classObj
+            }
+            tempMajorsArray.push(classD)
+        })
+        setMajors(tempMajorsArray)
+    },[classDataDB])
+ 
 
-        // const { data, error } = fetchData("POST",requestUrl)
+    useEffect(()=> {
+    let tempClassesArray = []
 
-        // Push to the Home Page 
-        history.push('/dashboard')
+       sectionDataDB.map(section => {
+           let classD = {
+             label: section.course_name + " - " + section.section_id + ` ${section.semester} ${section.year} `,
+             value: section.id
+           }
+           tempClassesArray.push(classD)
+       })
+       setClasses(tempClassesArray)
+    },[sectionDataDB])
+
+
+    const saveDetails = () => {
+
+        const studentToken = String(user.token)
+        let selectedClassesArray = []
+        const studentYear = Number(year)
+        const studentMajor = String(major.value)
+
+        selectedClasses.map(option => {
+            selectedClassesArray.push(Number(option.value))
+        })
+        const createStudentRequestUrl = `http://localhost:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
+
+        const createClassesRequestUrl = `http://localhost:8081/eduall/grade/${studentToken}`
+
+        const body = {
+            sectionIds: selectedClassesArray
+        }
+
+        fetch(createStudentRequestUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        .then(res => res.json())
+        .then(data => {
+            if (data.id){
+                fetch(createClassesRequestUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(selectedClassesArray)
+                  })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    history.push('/dashboard')
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
+        }).catch(error => {
+            console.log(error)
+        })
     }  
 
     return (

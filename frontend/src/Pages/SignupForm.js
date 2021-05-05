@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { ContextStore } from '../ContextStore';
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
+import { useAlert } from 'react-alert'
 
 export default function SignupForm() {
   const [formDetails, setFormDetails] = useState({email: "", password : "", firstName : "", lastName: ""})
@@ -9,6 +10,7 @@ export default function SignupForm() {
   const { CurrentUser, SideBar } = useContext(ContextStore);
   const [ user, setUser ] = CurrentUser;
   const [ showSidebar, setShowSidebar] = SideBar;
+  const alert = useAlert()
 
   const history = useHistory()
   useEffect(() => {
@@ -33,8 +35,16 @@ export default function SignupForm() {
       lastName: formDetails.lastName,
       email: formDetails.email,
       pwd: formDetails.password,
-      Role: role
+      role: userType.value
     }
+    const userObject = {
+      token:"",
+      firstName: "",
+      lastName: "",
+      email:"",
+      role:"",
+    }
+
     fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,15 +52,27 @@ export default function SignupForm() {
     })
       .then(res => res.json())
       .then(data => {
-        if (data !== null) {
-          setUser(data);
-          if (role === "Professor") {
-            history.push("/register/professor");
-          } else if (role === "Student") {
-            history.push("/register/student");
+          if (data.token){
+            // Get the token out of this data 
+            userObject.token = data.token
+            userObject.firstName = data.firstName
+            userObject.lastName = data.lastName
+            userObject.email = data.email
+            userObject.role = data.role
+             setUser(userObject)
+            if (userType.value === "Professor") {
+              alert.show("Professor account created successfully")
+              history.push("/register/professor");
+            } else if (userType.value === "Student") {
+              alert.show("Student account created successfully")
+              history.push("/register/student");
+            }
+          }else{
+            alert.show(data.message)
           }
-        }
-      })
+        }).catch(error => {
+          console.log(error)
+        })
   }
 
   return (

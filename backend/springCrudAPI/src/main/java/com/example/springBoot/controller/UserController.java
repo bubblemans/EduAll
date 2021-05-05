@@ -52,14 +52,26 @@ public class UserController {
 	}
 
 	@GetMapping("/{email}/{Password}")
-	public User getUserByEmailPassword( @PathVariable(value = "email") String email, @PathVariable(value = "Password") String Password) {
-		User u = this.userRepository.searchByEmailAndPWD(email, Password);
-		if(this.userRepository.existsById(u.getID())){
-			return u;
+	public User getUserByEmailPassword(@Valid @PathVariable(value = "email") String email, @PathVariable(value = "Password") String Password) {
+		User u = this.userRepository.findByEmail(email);
+		if(u != null){
+			if(u.getPwd().equals(Password)){
+				return u;
+			}
+			else{
+				throw new ResourceNotFoundException("User not found");
+			} 
 		}
 		else{
 			throw new ResourceNotFoundException("User not found");
-		}
+		} 
+		// User u = this.userRepository.searchByEmailAndPWD(email, Password);
+		// if(this.userRepository.existsById(u.getID())){
+		// 	return u;
+		// }
+		// else{
+		// 	throw new ResourceNotFoundException("User not found");
+		// }
 	}
 
 	//Create user
@@ -115,10 +127,10 @@ public class UserController {
 	}
 
 	//Get userId by Token
-	@GetMapping("/{id}/token")
+	@GetMapping("/getStudent/{token}")
 	@ResponseBody
-	public Map<String,Object> getIdByToken(@PathVariable("id") long id, @RequestParam("token") String token){
-		String userId = "";
+	public Map<String,Object> getIdByToken(@PathVariable("token") String token){
+		String userId = "", jsId = "";
 		Map<String, Object> js = new LinkedHashMap<>();
 
 		try {

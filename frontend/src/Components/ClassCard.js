@@ -1,6 +1,6 @@
 import React from 'react'
 import '../App.css'
-export default function ClassCard({ code, name, days, time, grade, color }) {
+export default function ClassCard({ code, name, days, time, color }) {
     return(
         <div className="class-card" style={{backgroundColor:color}}>
         <div className="class-code" >{code}</div>
@@ -16,7 +16,6 @@ export default function ClassCard({ code, name, days, time, grade, color }) {
         </div>
         <div className="label">Room name</div>
         <div className="class-details">{code}</div>
-        <div className="class-grade">Grade: {grade}</div>
     </div>
     )
 }

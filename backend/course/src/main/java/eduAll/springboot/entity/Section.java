@@ -30,13 +30,18 @@ public class Section{
 	
 	@Column(name = "capacity")
 	private int capacity;
+
+
+	@Column(name = "days")
+	private String days;
+	
 	
 	public Section() {
 		
 	}
 	
 	public Section(long section_id, long course_id, String semester, int year, String course_name, String timeslot,
-			int capacity) {
+			int capacity, String days) {
 		super();
 		this.section_id = section_id;
 		this.course_id = course_id;
@@ -45,6 +50,7 @@ public class Section{
 		this.course_name = course_name;
 		this.timeslot = timeslot;
 		this.capacity = capacity;
+		this.days = days;
 	}
 
 	public long getId() {
@@ -79,6 +85,11 @@ public class Section{
 		return year;
 	}
 
+	public String getdays() {
+		return days;
+	}
+
+
 	public void setYear(int year) {
 		this.year = year;
 	}
@@ -97,6 +108,9 @@ public class Section{
 
 	public void setTimeslot(String timeslot) {
 		this.timeslot = timeslot;
+	}
+	public String setDays(String Days) {
+		return days;
 	}
 
 	public int getCapacity() {
