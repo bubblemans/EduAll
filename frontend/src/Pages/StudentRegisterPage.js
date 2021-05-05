@@ -94,11 +94,7 @@ export default function StudentRegisterPage() {
         const createStudentRequestUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
 
         const createClassesRequestUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/grade/${studentToken}`
-
-        const body = {
-            sectionIds: selectedClassesArray
-        }
-
+        
         fetch(createStudentRequestUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
