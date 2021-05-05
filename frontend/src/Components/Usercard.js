@@ -61,9 +61,6 @@ const changeInfo = () => {
         <div className="image-container">
           <img
             src={photo}
-            alt=" "
-            height="100px"
-            width="100px"
           />
         </div>
         <div className="info-container" style={{ flex: 1 }}>

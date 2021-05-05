@@ -13,7 +13,7 @@
     border-radius: 10px;
     /*box-shadow: 0px 1px 10px 1px black;*/
 
-    
+
 }
 .example_a {
     color: #fff !important;
@@ -26,7 +26,7 @@
     border: none;
     transition: all 0.4s ease 0s;
     }
-    
+
     .example_a:hover {
         background: #434343;
         letter-spacing: 1px;
@@ -34,7 +34,7 @@
         -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
         box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
         transition: all 0.4s ease 0s;
-        } 
+        }
 .upper-container
 {
     height: 100px;
@@ -55,7 +55,7 @@
     border: 5px solid grey;
     margin: 0;
     margin-top: -300px;
-    margin-left: 250px;
+    margin-left: 400px;
     line-height: 45px;
     text-align: left;
 
