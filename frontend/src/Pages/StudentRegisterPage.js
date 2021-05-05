@@ -29,14 +29,14 @@ export default function StudentRegisterPage() {
 
     useEffect(() => {
         setShowSidebar(false)
-        const sectionUrl = "http://localhost:8081/eduall/section"
+        const sectionUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/section`
         fetch(sectionUrl)
         .then(res => res.json())
         .then(data => {
             setSectionDataDB(data)
         })
 
-        const classUrl = "http://localhost:8081/eduall/course"
+        const classUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/course`
         fetch(classUrl)
         .then(res => res.json())
         .then(data => {
@@ -65,7 +65,7 @@ export default function StudentRegisterPage() {
         })
         setMajors(tempMajorsArray)
     },[classDataDB])
- 
+
 
     useEffect(()=> {
     let tempClassesArray = []
@@ -91,9 +91,9 @@ export default function StudentRegisterPage() {
         selectedClasses.map(option => {
             selectedClassesArray.push(Number(option.value))
         })
-        const createStudentRequestUrl = `http://localhost:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
+        const createStudentRequestUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/student/${studentToken}/${studentYear}/${studentMajor}`
 
-        const createClassesRequestUrl = `http://localhost:8081/eduall/grade/${studentToken}`
+        const createClassesRequestUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/grade/${studentToken}`
 
         const body = {
             sectionIds: selectedClassesArray
@@ -122,7 +122,7 @@ export default function StudentRegisterPage() {
         }).catch(error => {
             console.log(error)
         })
-    }  
+    }
 
     return (
         <>

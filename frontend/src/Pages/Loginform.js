@@ -37,7 +37,7 @@ export default function Loginform() {
     let password = String(formDetails.password)
     console.log(email)
     console.log(password)
-    const url = "http://localhost:8080/api/users/"+ email+"/"+ password;
+    const url = process.env.REACT_APP_BASE_URL + ":8080/api/users/"+ email+"/"+ password;
     fetch(url)
       .then(res => res.json())
       .then(data => {

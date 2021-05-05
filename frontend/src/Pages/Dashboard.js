@@ -16,7 +16,7 @@ export default function Dashboard () {
 
     useEffect(() => {
         const token = user.token
-        const sectionUrl = `http://localhost:8081/eduall/section/${token}`
+        const sectionUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/section/${token}`
         fetch(sectionUrl)
         .then(res => res.json())
         .then(data => {
@@ -24,13 +24,13 @@ export default function Dashboard () {
         })
 
         setShowSidebar(true)
-        const classUrl = "http://localhost:8081/eduall/course"
+        const classUrl = `${process.env.REACT_APP_BASE_URL}:8081/eduall/course`
         fetch(classUrl)
         .then(res => res.json())
         .then(data => {
             setClassDataDB(data)
         })
-    
+
     },[])
 
     useEffect(()=>{
@@ -56,7 +56,7 @@ export default function Dashboard () {
         })
         setClassData(tempClassArray)
     },[classNames,sectionDataDB])
- 
+
 
     const colors = ["#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4","#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4","#9463F7","#3e8ef7","#FAA700","#ff4c52","#11C26D","#F57D1B","#757575","#0bb2d4"]
     return(
@@ -65,7 +65,7 @@ export default function Dashboard () {
                 DashBoard
             </div>
             <div className="heading">Classes</div>
-            <div className="container"> 
+            <div className="container">
                 {classData.map((item,i)=> {
                     return(
                         <ClassCard code={item.code} name={item.name} days={item.days} time={item.time} color={colors[i]}/>
