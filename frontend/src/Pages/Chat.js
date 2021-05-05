@@ -137,7 +137,6 @@ export default function Chat() {
 
   const createRoom = participant => {
     const url = process.env.REACT_APP_BASE_URL + ":4000/room/" + user.token + "?participant=" + participant;
-    console.log(user);
     const body = {
       name: "Room",
       participants: [user.id, participant]
