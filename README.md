@@ -100,9 +100,7 @@ For other services, please read [Set up development environment](#set-up-develop
 You can also re-build the entire system by running the commands.
 ```bash
 sh update.sh
-sh deploy.sh<img width="145" alt="Screen Shot 2021-05-08 at 9 54 39 PM" src="https://user-images.githubusercontent.com/23702266/117541764-fedd1380-b047-11eb-858a-5a6547b388df.png">
-<img width="149" alt="Screen Shot 2021-05-08 at 9 56 24 PM" src="https://user-images.githubusercontent.com/23702266/117541816-406dbe80-b048-11eb-98b5-bc6b0df39b0e.png">
-
+sh deploy.sh
 ```
 
 ## Contributing
